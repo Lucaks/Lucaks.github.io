@@ -93,20 +93,20 @@
 
 
 
-<meta name="description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx 3、 附加进程 1cycript -p xx_id">
+<meta name="description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用dumpdecrypted 砸壳">
 <meta property="og:url" content="http://yoursite.com/2017/06/01/使用dumpdecrypted 砸壳/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx 3、 附加进程 1cycript -p xx_id">
+<meta property="og:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
 <meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/14962877671004/14962917593079.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/14962877671004/14962940895497.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/14962877671004/14962922876805.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/14962877671004/14962948355165.jpg">
-<meta property="og:updated_time" content="2017-06-03T16:01:31.000Z">
+<meta property="og:updated_time" content="2017-06-03T16:03:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用dumpdecrypted 砸壳">
-<meta name="twitter:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx 3、 附加进程 1cycript -p xx_id">
+<meta name="twitter:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
 <meta name="twitter:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/14962877671004/14962917593079.jpg">
 
 
@@ -385,9 +385,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址）</div></pre></td></tr></table></figure>
 <p><strong>2</strong>、查看需要附加进程ID</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux | grep xxx</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p><strong>3</strong>、 附加进程</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cycript -p xx_id</div></pre></td></tr></table></figure>
-<a id="more"></a>
 <p><strong>4</strong>、因为只有在沙盒内才有读写权限，所以必须把dylib拷贝到沙盒才能生成解密后的文件。通过如下命令得到Documents目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectoryinDomains:NSUserDomainMask][0]</div></pre></td></tr></table></figure>
 <p> <img src="images/14962877671004/14962917593079.jpg" alt=""></p>
@@ -439,6 +439,10 @@
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/07/PWN 学习之 ROP篇/" rel="next" title="PWN 学习之 ROP篇">
+                <i class="fa fa-chevron-left"></i> PWN 学习之 ROP篇
+              </a>
             
           </div>
 
@@ -518,7 +522,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -529,7 +533,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
