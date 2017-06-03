@@ -94,21 +94,21 @@
 
 
 <meta name="description" content="分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。 1adb pull /system/bin/linke">
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:title" content="init_array下断">
-<meta property="og:url" content="http://yoursite.com/test/ init_array下断.html">
+<meta property="og:url" content="http://yoursite.com/2017/05/02/ init_array下断/index.html">
 <meta property="og:site_name" content="L">
 <meta property="og:description" content="分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。 1adb pull /system/bin/linke">
-<meta property="og:image" content="http://yoursite.com/test/images/14937357926330/14937381261604.png">
-<meta property="og:image" content="http://yoursite.com/test/images/14937357926330/14937388837060.jpg">
-<meta property="og:image" content="http://yoursite.com/test/images/14937357926330/14937749248088.jpg">
-<meta property="og:image" content="http://yoursite.com/test/images/14937357926330/14937751562344.png">
-<meta property="og:image" content="http://yoursite.com/test/images/14937357926330/14937752802048.png">
+<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937381261604.png">
+<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937388837060.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937749248088.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937751562344.png">
+<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937752802048.png">
 <meta property="og:updated_time" content="2017-06-03T16:15:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="init_array下断">
 <meta name="twitter:description" content="分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。 1adb pull /system/bin/linke">
-<meta name="twitter:image" content="http://yoursite.com/test/images/14937357926330/14937381261604.png">
+<meta name="twitter:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937381261604.png">
 
 
 
@@ -136,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/test/ init_array下断.html"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/02/ init_array下断/"/>
 
 
 
@@ -273,17 +273,113 @@
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h1 class="post-title" itemprop="name headline">init_array下断</h1>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/ init_array下断/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lucaks">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/blog_head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">init_array下断</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T22:36:32+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/02/ init_array下断/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/05/02/ init_array下断/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
     
-      <p>分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。</p>
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb pull /system/bin/linker.so</div></pre></td></tr></table></figure>
 <a id="more"></a>
 <p>下载手机中的linker,通过IDA分析。分析完成后打开字符串表，搜索“[Calling %s @ &amp;p for ‘%s’]”。</p>
@@ -308,7 +404,69 @@
 <p>我们可以清晰的看到通过dlsym寻找到 “JNI_OnLoad” 的函数地址。然后在127行处执行。对照的汇编代码如下图。<br><img src="images/14937357926330/14937752802048.png" alt=""></p>
 <p>BLX R8就是执行JNI_OnLoad函数。现在我们使用IDA动态调试，当附加上目标程序后，通过ctrl+s 寻找到libdvm.so的基地址。此时就能得到执行JNI_OnLoad的函数地址。通过对JNI_OnLoad下断点，我们在BLX R8 处，按下F7就能进入JNI_OnLoad函数。</p>
 
-    
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/02/ linker加载so/" rel="next" title="linker加载so">
+                <i class="fa fa-chevron-left"></i> linker加载so
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/07/PWN 学习之 ROP篇/" rel="prev" title="PWN 学习之 ROP篇">
+                PWN 学习之 ROP篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -372,7 +530,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -383,7 +541,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -546,10 +704,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
@@ -570,8 +728,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/test/ init_array下断.html';
-          this.page.identifier = 'test/ init_array下断.html';
+          this.page.url = 'http://yoursite.com/2017/05/02/ init_array下断/';
+          this.page.identifier = '2017/05/02/ init_array下断/';
           this.page.title = 'init_array下断';
         };
         var d = document, s = d.createElement('script');

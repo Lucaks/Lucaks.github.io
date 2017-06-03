@@ -93,21 +93,12 @@
 
 
 
-<meta name="description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
 <meta property="og:type" content="website">
-<meta property="og:title" content="使用dumpdecrypted 砸壳">
-<meta property="og:url" content="http://yoursite.com/test/使用dumpdecrypted 砸壳.html">
+<meta property="og:title" content="L">
+<meta property="og:url" content="http://yoursite.com/categories/Android/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
-<meta property="og:image" content="http://yoursite.com/test/images/zake/14962917593079.jpg">
-<meta property="og:image" content="http://yoursite.com/test/images/zake/14962940895497.jpg">
-<meta property="og:image" content="http://yoursite.com/test/images/zake/14962922876805.jpg">
-<meta property="og:image" content="http://yoursite.com/test/images/zake/14962948355165.jpg">
-<meta property="og:updated_time" content="2017-06-03T18:18:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用dumpdecrypted 砸壳">
-<meta name="twitter:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
-<meta name="twitter:image" content="http://yoursite.com/test/images/zake/14962917593079.jpg">
+<meta name="twitter:title" content="L">
 
 
 
@@ -135,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/test/使用dumpdecrypted 砸壳.html"/>
+  <link rel="canonical" href="http://yoursite.com/categories/Android/"/>
 
 
 
 
 
-  <title>使用dumpdecrypted 砸壳 | L</title>
+  <title>分类: Android | L</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -177,7 +168,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -271,46 +262,73 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-  <header class="post-header">
-
-	<h1 class="post-title" itemprop="name headline">使用dumpdecrypted 砸壳</h1>
-
-
-
-</header>
+  <section id="posts" class="posts-collapse">
+    <div class="collection-title">
+      <h1>Android<small>分类</small>
+      </h1>
+    </div>
 
     
-    
-      <ul>
-<li>从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。</li>
-</ul>
-<p><strong>1</strong>、使用ssh进去iPhone</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址）</div></pre></td></tr></table></figure>
-<p><strong>2</strong>、查看需要附加进程ID</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux | grep xxx</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p><strong>3</strong>、 附加进程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cycript -p xx_id</div></pre></td></tr></table></figure>
-<p><strong>4</strong>、因为只有在沙盒内才有读写权限，所以必须把dylib拷贝到沙盒才能生成解密后的文件。通过如下命令得到Documents目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectoryinDomains:NSUserDomainMask][0]</div></pre></td></tr></table></figure>
-<p> <img src="images/zake/14962917593079.jpg" alt=""></p>
-<ul>
-<li>得到Documents目录的地址后我们将dumpdecrypted.dylib拷贝到Documents目录下。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp dumpdecrypted.dylib root@192.168.2.7:/var/mobile/Containers/Data/Application/567FA43A-91EA-4F75-BFA8-A77A55F482F0/Documents/</div></pre></td></tr></table></figure>
-<p> <img src="images/zake/14962940895497.jpg" alt=""></p>
-<ul>
-<li>开始砸壳</li>
-</ul>
-<p><strong>1</strong>、砸壳</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DYLD_INSERT_LIBRARIES=/var/mobile/Containers/Data/Application/567FA43A-91EA-4F75-BFA8-A77A55F482F0/Documents/dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/36DBE68E-9F3F-485C-9241-63A952831843/NiuNiuGame-mobile.app/NiuNiuGame-mobile</div></pre></td></tr></table></figure>
-<p><img src="images/zake/14962922876805.jpg" alt=""></p>
-<p><strong>2</strong>、 对 xxx.decrypted提取脱壳后的文件<br>使用 <strong>otool -s xxx.decrypted | grep crypt</strong> 可以看到已经脱壳的平台文件。1表示没有脱壳，0表示已经解密。我们可以看到arm64的已经成功的脱壳。<br>此时我们使用 <strong>lipo xxx.decrypted -thin arm64 -output aimDir</strong> 提取脱壳文件。<br>提取成功的文件已经能够成功地静态的分析了。</p>
-<p><img src="images/zake/14962948355165.jpg" alt=""></p>
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2017/05/02/ init_array下断/" itemprop="url">
+              
+                <span itemprop="name">init_array下断</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2017-05-02T22:36:32+08:00"
+              content="2017-05-02" >
+          05-02
+        </time>
+      </div>
+
+    </header>
+  </article>
+
 
     
-  </div>
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2017/05/02/ linker加载so/" itemprop="url">
+              
+                <span itemprop="name">linker加载so</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2017-05-02T21:22:23+08:00"
+              content="2017-05-02" >
+          05-02
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+    
+  </section>
+
+  
+
 
 
           </div>
@@ -318,17 +336,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -364,7 +371,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -375,7 +382,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -543,18 +550,6 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/test/使用dumpdecrypted 砸壳.html';
-          this.page.identifier = 'test/使用dumpdecrypted 砸壳.html';
-          this.page.title = '使用dumpdecrypted 砸壳';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
     
 
   
