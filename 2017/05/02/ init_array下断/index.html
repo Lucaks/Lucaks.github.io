@@ -99,16 +99,16 @@
 <meta property="og:url" content="http://yoursite.com/2017/05/02/ init_array下断/index.html">
 <meta property="og:site_name" content="L">
 <meta property="og:description" content="分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。 1adb pull /system/bin/linke">
-<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937381261604.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937388837060.jpg">
-<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937749248088.jpg">
-<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937751562344.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937752802048.png">
-<meta property="og:updated_time" content="2017-06-03T16:15:43.000Z">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933059a2101d.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933059a3719f.jpg">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933059a498bf.jpg">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933059a3a837.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933059a39430.png">
+<meta property="og:updated_time" content="2017-06-03T19:06:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="init_array下断">
 <meta name="twitter:description" content="分析了linker加载so后，我们知道了linker会先执行init,init_array段中的代码。目前加壳代码基本都是放在之中。现在我们知道了加载so的时机，linker在调用init_array的时候会输出 “[Calling %s @ &amp;amp;p for ‘%s’]”,思路是可以通过定位该字符串来定位调用init_array的位置。 1adb pull /system/bin/linke">
-<meta name="twitter:image" content="http://yoursite.com/2017/05/02/%20init_array下断/images/14937357926330/14937381261604.png">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/04/5933059a2101d.png">
 
 
 
@@ -383,11 +383,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb pull /system/bin/linker.so</div></pre></td></tr></table></figure>
 <a id="more"></a>
 <p>下载手机中的linker,通过IDA分析。分析完成后打开字符串表，搜索“[Calling %s @ &amp;p for ‘%s’]”。</p>
-<p><img src="images/14937357926330/14937381261604.png" alt=""></p>
+<p><img src="https://ooo.0o0.ooo/2017/06/04/5933059a2101d.png" alt="14937381261604.png"></p>
 <p>BLX R4是调用代码init_array的地方，记录下 offset addr。<br>接下来动态调试，如果so实在app启动的时候就加载，那么我们就需要使用 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell am start -D -n packageName/activityName</div></pre></td></tr></table></figure>
 <p>启动app,然后使用IDA附加。附加后在IDA的module list中搜索linker这一项。</p>
-<p><img src="images/14937357926330/14937388837060.jpg" alt=""></p>
+<p><img src="https://ooo.0o0.ooo/2017/06/04/5933059a3719f.jpg" alt="14937388837060.jpg"></p>
 <p>Base这一栏是linker在内存中加载的基地址，所以init_array在内存中的调用的地方BLX R4 的偏移地址为 address=Base+offest。在反汇编窗口按下G建，输入 address，即可跳转过去，并设置好断点。如果不是汇编代码，可以通过C键 convert 为汇编代码。</p>
 <p>此时通过jdb附加让程序跑起来，这个时候我们就能断在init_array的入口处。</p>
 <h2 id="JNI-ONLoad-下断"><a href="#JNI-ONLoad-下断" class="headerlink" title="JNI_ONLoad 下断"></a>JNI_ONLoad 下断</h2><p>参照init_array下断的思路，我们首先要确定JNI_ONload 何时被调用。JNI_ONLoad 实际上在LoadNativeLibrary 调用。</p>
@@ -399,9 +399,9 @@
 <p>dump 手机中的so到本地，通过IDA 分析</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb pull /system/lib/libdvm.so 或者 libart.so</div></pre></td></tr></table></figure>
 <p>查看IDA的字符串窗口，搜索 “JNI_OnLoad”，通过交叉引用我们可以定位到调用的地方，记录下offest addr。</p>
-<p>反汇编窗口，这个时候我们记录下偏移地址，这个地址可以多次使用。<br><img src="images/14937357926330/14937749248088.jpg" alt=""></p>
-<p>通过F5 将汇编反编译为伪C代码<br><img src="images/14937357926330/14937751562344.png" alt=""></p>
-<p>我们可以清晰的看到通过dlsym寻找到 “JNI_OnLoad” 的函数地址。然后在127行处执行。对照的汇编代码如下图。<br><img src="images/14937357926330/14937752802048.png" alt=""></p>
+<p>反汇编窗口，这个时候我们记录下偏移地址，这个地址可以多次使用。<br><img src="https://ooo.0o0.ooo/2017/06/04/5933059a498bf.jpg" alt="14937749248088.jpg"></p>
+<p>通过F5 将汇编反编译为伪C代码<br><img src="https://ooo.0o0.ooo/2017/06/04/5933059a3a837.png" alt="14937751562344.png"></p>
+<p>我们可以清晰的看到通过dlsym寻找到 “JNI_OnLoad” 的函数地址。然后在127行处执行。对照的汇编代码如下图。<br><img src="https://ooo.0o0.ooo/2017/06/04/5933059a39430.png" alt="14937752802048.png"></p>
 <p>BLX R8就是执行JNI_OnLoad函数。现在我们使用IDA动态调试，当附加上目标程序后，通过ctrl+s 寻找到libdvm.so的基地址。此时就能得到执行JNI_OnLoad的函数地址。通过对JNI_OnLoad下断点，我们在BLX R8 处，按下F7就能进入JNI_OnLoad函数。</p>
 
       

