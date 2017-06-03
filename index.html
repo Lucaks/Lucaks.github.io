@@ -374,20 +374,17 @@
 
       
         
-          
-            <ul>
+          <ul>
 <li>OpenSSH链接手机</li>
 </ul>
-<p>首先准备一台IOS的越狱设备，通过Cydia 安装OpenSSH，让电脑能够通过SSH登录设备。找到设备的ip地址，在命令行中运行ssh root@ip 连接上手机设备。root的默认密码是alpine.安装好OpenSSH后，为防止恶意软件利用需要修改默认密码。通过passwd 命令然后输入2次新的密码就成功修改默认密码。</p>
-<p><img src="images/14962848116225/14962853948416.jpg" alt=""><br>如果出现ps命令不能使用，这就需要我们安装adv-cmds.<br>安装后我们就能使用ps e 或者ps aux 看到当前的进程信息。<br><img src="images/14962848116225/14962865279524.jpg" alt=""></p>
-<ul>
-<li>USB 链接</li>
-</ul>
-<p>首先下载 <a href="http://static.chenpeng.info/uploads/2013/03/usbmuxd-1.0.8.tar.gz" target="_blank" rel="external">usbmuxd-1.0.8.tar.gz</a>到本地。<br><em>1</em>、 在本在PC上解压usbmuxd-1.0.8.tar.gz，cd到python-client文件夹下；<br><em>2</em>、命令行输入：python tcprelay.py -t 22:2222<br><em>3</em>、屏幕显示：Forwarding local port 2222 to remote port 22（成功）<br><em>4</em>、重新打开一个命令窗口输入：ssh root@localhost -p 2222<br><img src="images/14962848116225/14962871923357.jpg" alt=""></p>
-<p> <img src="images/14962848116225/14962872139833.jpg" alt=""></p>
-<p><a href="http://www.blogfshare.com/category/ios-secure" target="_blank" rel="external">参考文章</a></p>
-
-          
+<p>首先准备一台IOS的越狱设备，通过Cydia 安装OpenSSH，让电脑能够通过SSH登录设备。找到设备的ip地址，在命令行中运行ssh root@ip 连接上手机设备。root的默认密码是alpine.安装好OpenSSH后，为防止恶意软件利用需要修改默认密码。通过passwd 命令然后输入2次新的密码就成功修改默认密码。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/03/Mac 链接iPhone/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -529,8 +526,7 @@
 
       
         
-          
-            <ul>
+          <ul>
 <li>从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。</li>
 </ul>
 <p><strong>1</strong>、使用ssh进去iPhone</p>
@@ -539,24 +535,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux | grep xxx</div></pre></td></tr></table></figure>
 <p><strong>3</strong>、 附加进程</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cycript -p xx_id</div></pre></td></tr></table></figure>
-<p><strong>4</strong>、因为只有在沙盒内才有读写权限，所以必须把dylib拷贝到沙盒才能生成解密后的文件。通过如下命令得到Documents目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectoryinDomains:NSUserDomainMask][0]</div></pre></td></tr></table></figure>
-<p> <img src="images/14962877671004/14962917593079.jpg" alt=""></p>
-<ul>
-<li>得到Documents目录的地址后我们将dumpdecrypted.dylib拷贝到Documents目录下。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp dumpdecrypted.dylib root@192.168.2.7:/var/mobile/Containers/Data/Application/567FA43A-91EA-4F75-BFA8-A77A55F482F0/Documents/</div></pre></td></tr></table></figure>
-<p> <img src="images/14962877671004/14962940895497.jpg" alt=""></p>
-<ul>
-<li>开始砸壳</li>
-</ul>
-<p><strong>1</strong>、砸壳</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DYLD_INSERT_LIBRARIES=/var/mobile/Containers/Data/Application/567FA43A-91EA-4F75-BFA8-A77A55F482F0/Documents/dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/36DBE68E-9F3F-485C-9241-63A952831843/NiuNiuGame-mobile.app/NiuNiuGame-mobile</div></pre></td></tr></table></figure>
-<p><img src="images/14962877671004/14962922876805.jpg" alt=""></p>
-<p><strong>2</strong>、 对 xxx.decrypted提取脱壳后的文件<br>使用 <strong>otool -s xxx.decrypted | grep crypt</strong> 可以看到已经脱壳的平台文件。1表示没有脱壳，0表示已经解密。我们可以看到arm64的已经成功的脱壳。<br>此时我们使用 <strong>lipo xxx.decrypted -thin arm64 -output aimDir</strong> 提取脱壳文件。<br>提取成功的文件已经能够成功地静态的分析了。</p>
-<p><img src="images/14962877671004/14962948355165.jpg" alt=""></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/01/使用dumpdecrypted 砸壳/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
