@@ -274,6 +274,161 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/03/Mac 链接iPhone/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lucaks">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/blog_head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/03/Mac 链接iPhone/" itemprop="url">Mac链接iPhone</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-03T23:25:20+08:00">
+                2017-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IOS/" itemprop="url" rel="index">
+                    <span itemprop="name">IOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/03/Mac 链接iPhone/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/06/03/Mac 链接iPhone/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Mac-链接iPhone"><a href="#Mac-链接iPhone" class="headerlink" title="Mac 链接iPhone"></a>Mac 链接iPhone</h1><ul>
+<li>OpenSSH链接手机</li>
+</ul>
+<p>首先准备一台IOS的越狱设备，通过Cydia 安装OpenSSH，让电脑能够通过SSH登录设备。找到设备的ip地址，在命令行中运行ssh root@ip 连接上手机设备。root的默认密码是alpine.安装好OpenSSH后，为防止恶意软件利用需要修改默认密码。通过passwd 命令然后输入2次新的密码就成功修改默认密码。密码：He123456</p>
+<p><img src="media/14962848116225/14962853948416.jpg" alt=""><br>如果出现ps命令不能使用，这就需要我们安装adv-cmds.<br>安装后我们就能使用ps e 或者ps aux 看到当前的进程信息。<br><img src="media/14962848116225/14962865279524.jpg" alt=""></p>
+<ul>
+<li>USB 链接</li>
+</ul>
+<p>首先下载 <a href="http://static.chenpeng.info/uploads/2013/03/usbmuxd-1.0.8.tar.gz" target="_blank" rel="external">usbmuxd-1.0.8.tar.gz</a>到本地。<br><em>1</em>、 在本在PC上解压usbmuxd-1.0.8.tar.gz，cd到python-client文件夹下；<br><em>2</em>、命令行输入：python tcprelay.py -t 22:2222<br><em>3</em>、屏幕显示：Forwarding local port 2222 to remote port 22（成功）<br><em>4</em>、重新打开一个命令窗口输入：ssh root@localhost -p 2222<br><img src="media/14962848116225/14962871923357.jpg" alt=""></p>
+<p> <img src="media/14962848116225/14962872139833.jpg" alt=""></p>
+<p><a href="http://www.blogfshare.com/category/ios-secure" target="_blank" rel="external">参考文章</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/03/hello/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -432,12 +587,21 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
           
 
           
