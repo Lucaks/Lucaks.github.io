@@ -94,9 +94,9 @@
 
 
 <meta name="description" content="JNI_Onload和init_array 在SO脱壳中占了很大的比重。我们如何在它们的执行前下断点呢？这就需要考虑SO加载的时机。首先来分析一下 so是如何加载的：">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:title" content="linker加载so">
-<meta property="og:url" content="http://yoursite.com/2017/05/02/ linker加载so/index.html">
+<meta property="og:url" content="http://yoursite.com/test/ linker加载so.html">
 <meta property="og:site_name" content="L">
 <meta property="og:description" content="JNI_Onload和init_array 在SO脱壳中占了很大的比重。我们如何在它们的执行前下断点呢？这就需要考虑SO加载的时机。首先来分析一下 so是如何加载的：">
 <meta property="og:updated_time" content="2017-06-03T16:09:01.000Z">
@@ -130,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/02/ linker加载so/"/>
+  <link rel="canonical" href="http://yoursite.com/test/ linker加载so.html"/>
 
 
 
@@ -267,113 +267,17 @@
             
 
   <div id="posts" class="posts-expand">
-    
+  <header class="post-header">
 
-  
+	<h1 class="post-title" itemprop="name headline">linker加载so</h1>
 
-  
-  
-  
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/ linker加载so/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lucaks">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/blog_head.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="L">
-    </span>
+</header>
 
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">linker加载so</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T21:22:23+08:00">
-                2017-05-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/05/02/ linker加载so/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/05/02/ linker加载so/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
     
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>  JNI_Onload和init_array 在SO脱壳中占了很大的比重。我们如何在它们的执行前下断点呢？这就需要考虑SO加载的时机。<br>首先来分析一下 so是如何加载的：<br><a id="more"></a></p>
+      <p>  JNI_Onload和init_array 在SO脱壳中占了很大的比重。我们如何在它们的执行前下断点呢？这就需要考虑SO加载的时机。<br>首先来分析一下 so是如何加载的：<br><a id="more"></a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">soinfo* do_dlopen(const char* name, int flags) &#123;</div><div class="line">if ((flags &amp; ~(RTLD_NOW|RTLD_LAZY|RTLD_LOCAL|RTLD_GLOBAL)) != 0) &#123;</div><div class="line">DL_ERR(&quot;invalid flags to dlopen: %x&quot;, flags);</div><div class="line">return NULL;</div><div class="line">&#125;</div><div class="line">set_soinfo_pool_protection(PROT_READ | PROT_WRITE);</div><div class="line">soinfo* si = find_library(name);</div><div class="line">if (si != NULL) &#123;</div><div class="line">    si-&gt;CallConstructors();</div><div class="line"> &#125;</div><div class="line">set_soinfo_pool_protection(PROT_READ);</div><div class="line">  return si;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>find_libaray会判断so是否已经加载，如果没有加载，对so进行加载，完成一些初始化工作。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> tatic soinfo* find_library(const char* name) &#123;</div><div class="line"> soinfo* si = find_library_internal(name);</div><div class="line"> if (si != NULL) &#123;</div><div class="line">   si-&gt;ref_count++;</div><div class="line"> &#125;</div><div class="line"> return si;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -387,65 +291,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div></pre></td><td class="code"><pre><div class="line">static bool soinfo_link_image(soinfo* si) &#123;</div><div class="line">    /* &quot;base&quot; might wrap around UINT32_MAX. */</div><div class="line">    Elf32_Addr base = si-&gt;load_bias;</div><div class="line">    const Elf32_Phdr *phdr = si-&gt;phdr;</div><div class="line">    int phnum = si-&gt;phnum;</div><div class="line">    bool relocating_linker = (si-&gt;flags &amp; FLAG_LINKER) != 0;</div><div class="line"></div><div class="line">   /* We can&apos;t debug anything until the linker is relocated */</div><div class="line">    if (!relocating_linker) &#123;</div><div class="line">        INFO(&quot;[ linking %s ]&quot;, si-&gt;name);</div><div class="line">        DEBUG(&quot;si-&gt;base = 0x%08x si-&gt;flags = 0x%08x&quot;, si-&gt;base, si-&gt;flags);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /* Extract dynamic section */</div><div class="line">    size_t dynamic_count;</div><div class="line">    Elf32_Word dynamic_flags;</div><div class="line">    phdr_table_get_dynamic_section(phdr, phnum, base, &amp;si-&gt;dynamic,</div><div class="line">                                   &amp;dynamic_count, &amp;dynamic_flags);</div><div class="line">    if (si-&gt;dynamic == NULL) &#123;</div><div class="line">        if (!relocating_linker) &#123;</div><div class="line">            DL_ERR(&quot;missing PT_DYNAMIC in \&quot;%s\&quot;&quot;, si-&gt;name);</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">   &#125; else &#123;</div><div class="line">        if (!relocating_linker) &#123;</div><div class="line">            DEBUG(&quot;dynamic = %p&quot;, si-&gt;dynamic);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">#ifdef ANDROID_ARM_LINKER</div><div class="line">    (void) phdr_table_get_arm_exidx(phdr, phnum, base,</div><div class="line">                                    &amp;si-&gt;ARM_exidx, &amp;si-&gt;ARM_exidx_count);</div><div class="line">#endif</div><div class="line"></div><div class="line">    // Extract useful information from dynamic section.</div><div class="line">    uint32_t needed_count = 0;</div><div class="line">    for (Elf32_Dyn* d = si-&gt;dynamic; d-&gt;d_tag != DT_NULL; ++d) &#123;</div><div class="line">       DEBUG(&quot;d = %p, d[0](tag) = 0x%08x d[1](val) = 0x%08x&quot;, d, d-&gt;d_tag, d-&gt;d_un.d_val);</div><div class="line">        switch(d-&gt;d_tag)&#123;</div><div class="line">        case DT_HASH:</div><div class="line">            si-&gt;nbucket = ((unsigned *) (base + d-&gt;d_un.d_ptr))[0];</div><div class="line">            si-&gt;nchain = ((unsigned *) (base + d-&gt;d_un.d_ptr))[1];</div><div class="line">            si-&gt;bucket = (unsigned *) (base + d-&gt;d_un.d_ptr + 8);</div><div class="line">            si-&gt;chain = (unsigned *) (base + d-&gt;d_un.d_ptr + 8 + si-&gt;nbucket * 4);</div><div class="line">            break;</div><div class="line">        case DT_STRTAB:</div><div class="line">            si-&gt;strtab = (const char *) (base + d-&gt;d_un.d_ptr);</div><div class="line">            break;</div><div class="line">        case DT_SYMTAB:</div><div class="line">            si-&gt;symtab = (Elf32_Sym *) (base + d-&gt;d_un.d_ptr);</div><div class="line">            break;</div><div class="line">        case DT_PLTREL:</div><div class="line">           if (d-&gt;d_un.d_val != DT_REL) &#123;</div><div class="line">                DL_ERR(&quot;unsupported DT_RELA in \&quot;%s\&quot;&quot;, si-&gt;name);</div><div class="line">                return false;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case DT_JMPREL:</div><div class="line">            si-&gt;plt_rel = (Elf32_Rel*) (base + d-&gt;d_un.d_ptr);</div><div class="line">            break;</div><div class="line">        case DT_PLTRELSZ:</div><div class="line">            si-&gt;plt_rel_count = d-&gt;d_un.d_val / sizeof(Elf32_Rel);</div><div class="line">            break;</div><div class="line">        case DT_REL:</div><div class="line">            si-&gt;rel = (Elf32_Rel*) (base + d-&gt;d_un.d_ptr);</div><div class="line">            break;</div><div class="line">        case DT_RELSZ:</div><div class="line">            si-&gt;rel_count = d-&gt;d_un.d_val / sizeof(Elf32_Rel);</div><div class="line">            break;</div><div class="line">        case DT_PLTGOT:</div><div class="line">           /* Save this in case we decide to do lazy binding. We don&apos;t yet. */</div><div class="line">            si-&gt;plt_got = (unsigned *)(base + d-&gt;d_un.d_ptr);</div><div class="line">            break;</div><div class="line">        case DT_DEBUG:</div><div class="line">            // Set the DT_DEBUG entry to the address of _r_debug for GDB</div><div class="line">            // if the dynamic table is writable</div><div class="line">            if ((dynamic_flags &amp; PF_W) != 0) &#123;</div><div class="line">                d-&gt;d_un.d_val = (int) &amp;_r_debug;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">         case DT_RELA:</div><div class="line">            DL_ERR(&quot;unsupported DT_RELA in \&quot;%s\&quot;&quot;, si-&gt;name);</div><div class="line">            return false;</div><div class="line">        case DT_INIT:</div><div class="line">           si-&gt;init_func = reinterpret_cast&lt;linker_function_t&gt;(base + d-&gt;d_un.d_ptr);</div><div class="line">            DEBUG(&quot;%s constructors (DT_INIT) found at %p&quot;, si-&gt;name, si-&gt;init_func);</div><div class="line">            break;</div><div class="line">        case DT_FINI:</div><div class="line">            si-&gt;fini_func = reinterpret_cast&lt;linker_function_t&gt;(base + d-&gt;d_un.d_ptr);</div><div class="line">            DEBUG(&quot;%s destructors (DT_FINI) found at %p&quot;, si-&gt;name, si-&gt;fini_func);</div><div class="line">            break;</div><div class="line">        case DT_INIT_ARRAY:</div><div class="line">           si-&gt;init_array = reinterpret_cast&lt;linker_function_t*&gt;(base + d-&gt;d_un.d_ptr);</div><div class="line">1396            DEBUG(&quot;%s constructors (DT_INIT_ARRAY) found at %p&quot;, si-&gt;name, si-&gt;init_array);</div><div class="line">            break;</div><div class="line">        case DT_INIT_ARRAYSZ:</div><div class="line">            si-&gt;init_array_count = ((unsigned)d-&gt;d_un.d_val) / sizeof(Elf32_Addr);</div><div class="line">            break;</div><div class="line">        case DT_FINI_ARRAY:</div><div class="line">            si-&gt;fini_array = reinterpret_cast&lt;linker_function_t*&gt;(base + d-&gt;d_un.d_ptr);</div><div class="line">            DEBUG(&quot;%s destructors (DT_FINI_ARRAY) found at %p&quot;, si-&gt;name, si-&gt;fini_array);</div><div class="line">            break;</div><div class="line">        case DT_FINI_ARRAYSZ:</div><div class="line">           si-&gt;fini_array_count = ((unsigned)d-&gt;d_un.d_val) / sizeof(Elf32_Addr);</div><div class="line">            break;</div><div class="line">        case DT_PREINIT_ARRAY:</div><div class="line">            si-&gt;preinit_array = reinterpret_cast&lt;linker_function_t*&gt;(base + d-&gt;d_un.d_ptr);</div><div class="line">            DEBUG(&quot;%s constructors (DT_PREINIT_ARRAY) found at %p&quot;, si-&gt;name, si-&gt;preinit_array);</div><div class="line">            break;</div><div class="line">        case DT_PREINIT_ARRAYSZ:</div><div class="line">            si-&gt;preinit_array_count = ((unsigned)d-&gt;d_un.d_val) / sizeof(Elf32_Addr);</div><div class="line">            break;</div><div class="line">        case DT_TEXTREL:</div><div class="line">            si-&gt;has_text_relocations = true;</div><div class="line">            break;</div><div class="line">        case DT_SYMBOLIC:</div><div class="line">            si-&gt;has_DT_SYMBOLIC = true;</div><div class="line">            break;</div><div class="line">       case DT_NEEDED:</div><div class="line">            ++needed_count;</div><div class="line">           break;</div><div class="line">#if defined DT_FLAGS</div><div class="line">        // TODO: why is DT_FLAGS not defined?</div><div class="line">        case DT_FLAGS:</div><div class="line">            if (d-&gt;d_un.d_val &amp; DF_TEXTREL) &#123;</div><div class="line">                si-&gt;has_text_relocations = true;</div><div class="line">            &#125;</div><div class="line">            if (d-&gt;d_un.d_val &amp; DF_SYMBOLIC) &#123;</div><div class="line">                si-&gt;has_DT_SYMBOLIC = true;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">#endif</div><div class="line">#if defined(ANDROID_MIPS_LINKER)</div><div class="line">        case DT_STRSZ:</div><div class="line">        case DT_SYMENT:</div><div class="line">        case DT_RELENT:</div><div class="line">             break;</div><div class="line">       case DT_MIPS_RLD_MAP:</div><div class="line">            // Set the DT_MIPS_RLD_MAP entry to the address of _r_debug for GDB.</div><div class="line">            &#123;</div><div class="line">              r_debug** dp = (r_debug**) d-&gt;d_un.d_ptr;</div><div class="line">              *dp = &amp;_r_debug;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case DT_MIPS_RLD_VERSION:</div><div class="line">        case DT_MIPS_FLAGS:</div><div class="line">        case DT_MIPS_BASE_ADDRESS:</div><div class="line">        case DT_MIPS_UNREFEXTNO:</div><div class="line">           break;</div><div class="line"></div><div class="line">        case DT_MIPS_SYMTABNO:</div><div class="line">            si-&gt;mips_symtabno = d-&gt;d_un.d_val;</div><div class="line">            break;</div><div class="line"></div><div class="line">        case DT_MIPS_LOCAL_GOTNO:</div><div class="line">            si-&gt;mips_local_gotno = d-&gt;d_un.d_val;</div><div class="line">            break;</div><div class="line"></div><div class="line">        case DT_MIPS_GOTSYM:</div><div class="line">            si-&gt;mips_gotsym = d-&gt;d_un.d_val;</div><div class="line">            break;</div><div class="line"></div><div class="line">        default:</div><div class="line">            DEBUG(&quot;Unused DT entry: type 0x%08x arg 0x%08x&quot;, d-&gt;d_tag, d-&gt;d_un.d_val);</div><div class="line">            break;</div><div class="line">#endif</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    DEBUG(&quot;si-&gt;base = 0x%08x, si-&gt;strtab = %p, si-&gt;symtab = %p&quot;,</div><div class="line">          si-&gt;base, si-&gt;strtab, si-&gt;symtab);</div><div class="line"></div><div class="line">    // Sanity checks.</div><div class="line">    if (relocating_linker &amp;&amp; needed_count != 0) &#123;</div><div class="line">        DL_ERR(&quot;linker cannot have DT_NEEDED dependencies on other libraries&quot;);</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    if (si-&gt;nbucket == 0) &#123;</div><div class="line">       DL_ERR(&quot;empty/missing DT_HASH in \&quot;%s\&quot; (built with --hash-style=gnu?)&quot;, si-&gt;name);</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    if (si-&gt;strtab == 0) &#123;</div><div class="line">        DL_ERR(&quot;empty/missing DT_STRTAB in \&quot;%s\&quot;&quot;, si-&gt;name);</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    if (si-&gt;symtab == 0) &#123;</div><div class="line">        DL_ERR(&quot;empty/missing DT_SYMTAB in \&quot;%s\&quot;&quot;, si-&gt;name);</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">   // If this is the main executable, then load all of the libraries from LD_PRELOAD now.</div><div class="line">    if (si-&gt;flags &amp; FLAG_EXE) &#123;</div><div class="line">        memset(gLdPreloads, 0, sizeof(gLdPreloads));</div><div class="line">        size_t preload_count = 0;</div><div class="line">        for (size_t i = 0; gLdPreloadNames[i] != NULL; i++) &#123;</div><div class="line">            soinfo* lsi = find_library(gLdPreloadNames[i]);</div><div class="line">            if (lsi != NULL) &#123;</div><div class="line">                gLdPreloads[preload_count++] = lsi;</div><div class="line">            &#125; else &#123;</div><div class="line">                // As with glibc, failure to load an LD_PRELOAD library is just a warning.</div><div class="line">                DL_WARN(&quot;could not load library \&quot;%s\&quot; from LD_PRELOAD for \&quot;%s\&quot;; caused by %s&quot;,</div><div class="line">1504                        gLdPreloadNames[i], si-&gt;name, linker_get_error_buffer());</div><div class="line">           &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    soinfo** needed = (soinfo**) alloca((1 + needed_count) * sizeof(soinfo*));</div><div class="line">    soinfo** pneeded = needed;</div><div class="line"></div><div class="line">    for (Elf32_Dyn* d = si-&gt;dynamic; d-&gt;d_tag != DT_NULL; ++d) &#123;</div><div class="line">        if (d-&gt;d_tag == DT_NEEDED) &#123;</div><div class="line">            const char* library_name = si-&gt;strtab + d-&gt;d_un.d_val;</div><div class="line">            DEBUG(&quot;%s needs %s&quot;, si-&gt;name, library_name);</div><div class="line">            soinfo* lsi = find_library(library_name);</div><div class="line">            if (lsi == NULL) &#123;</div><div class="line">                strlcpy(tmp_err_buf, linker_get_error_buffer(), sizeof(tmp_err_buf));</div><div class="line">               DL_ERR(&quot;could not load library \&quot;%s\&quot; needed by \&quot;%s\&quot;; caused by %s&quot;,</div><div class="line">                       library_name, si-&gt;name, tmp_err_buf);</div><div class="line">                return false;</div><div class="line">            &#125;</div><div class="line">            *pneeded++ = lsi;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    *pneeded = NULL;</div><div class="line"></div><div class="line">    if (si-&gt;has_text_relocations) &#123;</div><div class="line">        /* Unprotect the segments, i.e. make them writable, to allow</div><div class="line">         * text relocations to work properly. We will later call</div><div class="line">        * phdr_table_protect_segments() after all of them are applied</div><div class="line">         * and all constructors are run.</div><div class="line">         */</div><div class="line">        DL_WARN(&quot;%s has text relocations. This is wasting memory and is &quot;</div><div class="line">                &quot;a security risk. Please fix.&quot;, si-&gt;name);</div><div class="line">        if (phdr_table_unprotect_segments(si-&gt;phdr, si-&gt;phnum, si-&gt;load_bias) &lt; 0) &#123;</div><div class="line">            DL_ERR(&quot;can&apos;t unprotect loadable segments for \&quot;%s\&quot;: %s&quot;,</div><div class="line">                   si-&gt;name, strerror(errno));</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (si-&gt;plt_rel != NULL) &#123;</div><div class="line">        DEBUG(&quot;[ relocating %s plt ]&quot;, si-&gt;name );</div><div class="line">       if (soinfo_relocate(si, si-&gt;plt_rel, si-&gt;plt_rel_count, needed)) &#123;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    if (si-&gt;rel != NULL) &#123;</div><div class="line">        DEBUG(&quot;[ relocating %s ]&quot;, si-&gt;name );</div><div class="line">        if (soinfo_relocate(si, si-&gt;rel, si-&gt;rel_count, needed)) &#123;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">#ifdef ANDROID_MIPS_LINKER</div><div class="line">    if (!mips_relocate_got(si, needed)) &#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">#endif</div><div class="line"></div><div class="line">    si-&gt;flags |= FLAG_LINKED;</div><div class="line">    DEBUG(&quot;[ finished linking %s ]&quot;, si-&gt;name);</div><div class="line"></div><div class="line">    if (si-&gt;has_text_relocations) &#123;</div><div class="line">        /* All relocations are done, we can protect our segments back to</div><div class="line">         * read-only. */</div><div class="line">        if (phdr_table_protect_segments(si-&gt;phdr, si-&gt;phnum, si-&gt;load_bias) &lt; 0) &#123;</div><div class="line">            DL_ERR(&quot;can&apos;t protect segments for \&quot;%s\&quot;: %s&quot;,</div><div class="line">                   si-&gt;name, strerror(errno));</div><div class="line">            return false;</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   /* We can also turn on GNU RELRO protection */</div><div class="line">   if (phdr_table_protect_gnu_relro(si-&gt;phdr, si-&gt;phnum, si-&gt;load_bias) &lt; 0) &#123;</div><div class="line">       DL_ERR(&quot;can&apos;t enable GNU RELRO protection for \&quot;%s\&quot;: %s&quot;,</div><div class="line">              si-&gt;name, strerror(errno));</div><div class="line">       return false;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   notify_gdb_of_load(si);</div><div class="line">   return true;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>我们可以看到，系统加载so,在完成装载，映射和重定向以后，就首先执行.init和.init_array段的代码，之后如果纯在JNI_Onload 就调用该函数。我们对一个so分析，需要先看看有没有init_array section 和init section,so加壳一般会在初始化函数中进行脱壳操作。</p>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/02/ init_array下断/" rel="prev" title="init_array下断">
-                init_array下断 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
+    
   </div>
 
 
@@ -500,7 +346,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -511,7 +357,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -658,10 +504,10 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-
+  
 
   
 
@@ -682,8 +528,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/05/02/ linker加载so/';
-          this.page.identifier = '2017/05/02/ linker加载so/';
+          this.page.url = 'http://yoursite.com/test/ linker加载so.html';
+          this.page.identifier = 'test/ linker加载so.html';
           this.page.title = 'linker加载so';
         };
         var d = document, s = d.createElement('script');
