@@ -99,15 +99,15 @@
 <meta property="og:url" content="http://yoursite.com/2017/06/01/使用dumpdecrypted 砸壳/index.html">
 <meta property="og:site_name" content="L">
 <meta property="og:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
-<meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/zake/14962917593079.jpg">
-<meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/zake/14962940895497.jpg">
-<meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/zake/14962922876805.jpg">
-<meta property="og:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/zake/14962948355165.jpg">
-<meta property="og:updated_time" content="2017-06-03T18:18:52.000Z">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5932ffbcb8948.jpg">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933004f3c1c7.jpg">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/5933002c25e37.jpg">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/04/59330050ef5b0.jpg">
+<meta property="og:updated_time" content="2017-06-03T18:41:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用dumpdecrypted 砸壳">
 <meta name="twitter:description" content="从AppStore上下载下来的应用都是苹果加过壳的。这时需要我们使用砸壳工具进行脱壳。  1、使用ssh进去iPhone 1ssh root@xxx.xxx.xxx.xxx （iP地址为设备的iP地址） 2、查看需要附加进程ID 1ps aux | grep xxx">
-<meta name="twitter:image" content="http://yoursite.com/2017/06/01/使用dumpdecrypted%20砸壳/images/zake/14962917593079.jpg">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/04/5932ffbcb8948.jpg">
 
 
 
@@ -390,20 +390,20 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cycript -p xx_id</div></pre></td></tr></table></figure>
 <p><strong>4</strong>、因为只有在沙盒内才有读写权限，所以必须把dylib拷贝到沙盒才能生成解密后的文件。通过如下命令得到Documents目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectoryinDomains:NSUserDomainMask][0]</div></pre></td></tr></table></figure>
-<p> <img src="images/zake/14962917593079.jpg" alt=""></p>
+<p> <img src="https://ooo.0o0.ooo/2017/06/04/5932ffbcb8948.jpg" alt="14962917593079.jpg"></p>
 <ul>
 <li>得到Documents目录的地址后我们将dumpdecrypted.dylib拷贝到Documents目录下。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp dumpdecrypted.dylib root@192.168.2.7:/var/mobile/Containers/Data/Application/567FA43A-91EA-4F75-BFA8-A77A55F482F0/Documents/</div></pre></td></tr></table></figure>
-<p> <img src="images/zake/14962940895497.jpg" alt=""></p>
+<p> <img src="https://ooo.0o0.ooo/2017/06/04/5933004f3c1c7.jpg" alt="14962940895497.jpg"></p>
 <ul>
 <li>开始砸壳</li>
 </ul>
 <p><strong>1</strong>、砸壳</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DYLD_INSERT_LIBRARIES=/var/mobile/Containers/Data/Application/567FA43A-91EA-4F75-BFA8-A77A55F482F0/Documents/dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/36DBE68E-9F3F-485C-9241-63A952831843/NiuNiuGame-mobile.app/NiuNiuGame-mobile</div></pre></td></tr></table></figure>
-<p><img src="images/zake/14962922876805.jpg" alt=""></p>
+<p><img src="https://ooo.0o0.ooo/2017/06/04/5933002c25e37.jpg" alt="14962922876805.jpg"></p>
 <p><strong>2</strong>、 对 xxx.decrypted提取脱壳后的文件<br>使用 <strong>otool -s xxx.decrypted | grep crypt</strong> 可以看到已经脱壳的平台文件。1表示没有脱壳，0表示已经解密。我们可以看到arm64的已经成功的脱壳。<br>此时我们使用 <strong>lipo xxx.decrypted -thin arm64 -output aimDir</strong> 提取脱壳文件。<br>提取成功的文件已经能够成功地静态的分析了。</p>
-<p><img src="images/zake/14962948355165.jpg" alt=""></p>
+<p><img src="https://ooo.0o0.ooo/2017/06/04/59330050ef5b0.jpg" alt="14962948355165.jpg"></p>
 
       
     </div>
