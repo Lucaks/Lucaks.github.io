@@ -93,12 +93,12 @@
 
 
 
-<meta name="description" content="某VMP加固onCreate方法分析一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。对于加固前的dex文件,010editor中找到insns。翻译如下： 1234567891011.method protected onCreate(Bundle)V          .registers 5 invoke-superAppCompatActivity-&amp;gt;o">
+<meta name="description" content="某VMP加固onCreate方法分析一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。对于加固前的dex文件,010editor中找到insns。翻译如下：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="L">
+<meta property="og:title" content="某VMP加固onCreate方法分析">
 <meta property="og:url" content="http://yoursite.com/2018/01/02/vmp360/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="某VMP加固onCreate方法分析一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。对于加固前的dex文件,010editor中找到insns。翻译如下： 1234567891011.method protected onCreate(Bundle)V          .registers 5 invoke-superAppCompatActivity-&amp;gt;o">
+<meta property="og:description" content="某VMP加固onCreate方法分析一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。对于加固前的dex文件,010editor中找到insns。翻译如下：">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148896456854.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148906891717.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148907341940.jpg">
@@ -110,10 +110,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148928245942.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148929328573.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148936059709.jpg">
-<meta property="og:updated_time" content="2018-01-02T13:35:17.000Z">
+<meta property="og:updated_time" content="2018-07-09T10:17:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="L">
-<meta name="twitter:description" content="某VMP加固onCreate方法分析一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。对于加固前的dex文件,010editor中找到insns。翻译如下： 1234567891011.method protected onCreate(Bundle)V          .registers 5 invoke-superAppCompatActivity-&amp;gt;o">
+<meta name="twitter:title" content="某VMP加固onCreate方法分析">
+<meta name="twitter:description" content="某VMP加固onCreate方法分析一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。对于加固前的dex文件,010editor中找到insns。翻译如下：">
 <meta name="twitter:image" content="http://yoursite.com/2018/01/02/vmp360/15148891990651/15148896456854.jpg">
 
 
@@ -148,7 +148,7 @@
 
 
 
-  <title> | L</title>
+  <title>某VMP加固onCreate方法分析 | L</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -305,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">某VMP加固onCreate方法分析</h1>
         
 
         <div class="post-meta">
@@ -327,6 +327,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -363,8 +385,7 @@
       
 
       
-        <h1 id="某VMP加固onCreate方法分析"><a href="#某VMP加固onCreate方法分析" class="headerlink" title="某VMP加固onCreate方法分析"></a>某VMP加固onCreate方法分析</h1><p>一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。<br><img src="/2018/01/02/vmp360/15148891990651/15148896456854.jpg" alt=""><br>对于加固前的dex文件,010editor中找到insns。翻译如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.method protected onCreate(Bundle)V</div><div class="line">          .registers 5</div><div class="line"> invoke-superAppCompatActivity-&gt;onCreate(Bundle)V, p0, p1 # 6F 20 47 2A 43 00</div><div class="line"> invoke-virtual      MainActivity-&gt;hello()I, p0 #6E 10 18 3E 03 00</div><div class="line"> move-result         v0 # 0A 00</div><div class="line"> const-string        v1, &quot;360&quot;  #1A 01 33 01</div><div class="line"> invoke-static       String-&gt;valueOf(I)String, v0    #71 10 D2 3E 00 00</div><div class="line"> move-result-object  v2 # 0C 02</div><div class="line"> invoke-static       Log-&gt;i(String, String)I, v1, v2 #71 20 DC 38 21 00</div><div class="line"> return-void #0E 00</div><div class="line">.end method</div></pre></td></tr></table></figure>
+        <h1 id="某VMP加固onCreate方法分析"><a href="#某VMP加固onCreate方法分析" class="headerlink" title="某VMP加固onCreate方法分析"></a>某VMP加固onCreate方法分析</h1><p>一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。<br><img src="/2018/01/02/vmp360/15148891990651/15148896456854.jpg" alt=""><br>对于加固前的dex文件,010editor中找到insns。翻译如下：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.method protected onCreate(Bundle)V</div><div class="line">          .registers 5</div><div class="line"> invoke-superAppCompatActivity-&gt;onCreate(Bundle)V, p0, p1 # 6F 20 47 2A 43 00</div><div class="line"> invoke-virtual      MainActivity-&gt;hello()I, p0 #6E 10 18 3E 03 00</div><div class="line"> move-result         v0 # 0A 00</div><div class="line"> const-string        v1, &quot;360&quot;  #1A 01 33 01</div><div class="line"> invoke-static       String-&gt;valueOf(I)String, v0    #71 10 D2 3E 00 00</div><div class="line"> move-result-object  v2 # 0C 02</div><div class="line"> invoke-static       Log-&gt;i(String, String)I, v1, v2 #71 20 DC 38 21 00</div><div class="line"> return-void #0E 00</div><div class="line">.end method</div></pre></td></tr></table></figure></p>
 <p>二、利用Xposed 和inlineHook快速的进入Oncreate方法中</p>
 <p>app 加载so通过2种方式 System.loadLibrary 和System.load。通过hook加载so的方法让其先加载hook.so,在hook.so中再加载libjiagu.so。<br><img src="/2018/01/02/vmp360/15148891990651/15148906891717.jpg" alt=""><br><img src="/2018/01/02/vmp360/15148891990651/15148907341940.jpg" alt=""><br><img src="/2018/01/02/vmp360/15148891990651/15148907666460.jpg" alt=""></p>
 <p>此时我们的app已经能正常的运行起来。又因为onCreate方法是动态注册的，所以hook 注册函数dvmUseJNIBridge 当注册的是OnCreate函数时sleep 9s。<br><img src="/2018/01/02/vmp360/15148891990651/15148913261001.jpg" alt=""><br>这样的好处是我们可以直接进入onCreate注册的函数中，不用在乎Jni_Onload中的反调试。<br>打开app就能发现会有一段时间白屏，查看日志 说明我们已经能在注册OnCreate的时候暂停。<br><img src="/2018/01/02/vmp360/15148891990651/15148916166045.jpg" alt=""></p>
@@ -704,7 +725,7 @@
         var disqus_config = function () {
           this.page.url = 'http://yoursite.com/2018/01/02/vmp360/';
           this.page.identifier = '2018/01/02/vmp360/';
-          this.page.title = '';
+          this.page.title = '某VMP加固onCreate方法分析';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';
