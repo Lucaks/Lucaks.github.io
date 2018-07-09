@@ -1,0 +1,846 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0. 直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。 这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="腾讯加固分析">
+<meta property="og:url" content="http://yoursite.com/2017/11/21/legu/index.html">
+<meta property="og:site_name" content="L">
+<meta property="og:description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0. 直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。 这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / in">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112676221944.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112682096872.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112681311553.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112690479492.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112693065173.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112693835951.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112696904885.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112699542294.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112701088331.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112701433352.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112703050658.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112704331002.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112704405486.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112704534685.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112706127253.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112709707849.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112711228517.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112721438791.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112716147064.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112723312976.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112724133503.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112725392662.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112725282101.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112730037843.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112730457515.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112734604803.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112735044632.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112736335070.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112736545138.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112739116650.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112740861871.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112747987941.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112742791649.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112743369794.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112744312791.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112744558693.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112757574484.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112750872380.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113246941245.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113248018949.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113248193502.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113249718002.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113251322342.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113308680598.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113316245497.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113319147538.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113321276007.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113321910945.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113376140824.jpg">
+<meta property="og:updated_time" content="2018-07-09T08:44:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="腾讯加固分析">
+<meta name="twitter:description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0. 直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。 这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / in">
+<meta name="twitter:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112676221944.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/21/legu/"/>
+
+
+
+
+
+  <title>腾讯加固分析 | L</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e874447fc2f619cfe220dc6a05c4e5b3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">L</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/21/legu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lucaks">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/blog_head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">腾讯加固分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-21T20:29:29+08:00">
+                2017-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/21/legu/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/21/legu/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="腾讯加固分析"><a href="#腾讯加固分析" class="headerlink" title="腾讯加固分析"></a>腾讯加固分析</h1><ul>
+<li>修复so文件</li>
+</ul>
+<p>Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。<img src="/2017/11/21/legu/15112673692313/15112676221944.jpg" alt=""><br>使用readelf -S 查看so 的section 地址都被清0.<br><img src="/2017/11/21/legu/15112673692313/15112682096872.jpg" alt=""></p>
+<p>直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。<br><img src="/2017/11/21/legu/15112673692313/15112681311553.jpg" alt=""></p>
+<p>这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / init_array 执行解密。<br>所以使用debug 模式附加上app。</p>
+<p>查看linker 的源码可以发现如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">void soinfo::CallConstructors() &#123;</div><div class="line">  if (constructors_called) &#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  ...</div><div class="line">  ...</div><div class="line">  ...</div><div class="line">  TRACE(&quot;\&quot;%s\&quot;: calling constructors&quot;, name);</div><div class="line">  // DT_INIT should be called before DT_INIT_ARRAY if both are present.</div><div class="line">  CallFunction(&quot;DT_INIT&quot;, init_func);</div><div class="line">  CallArray(&quot;DT_INIT_ARRAY&quot;, init_array, init_array_count, false);</div><div class="line">&#125;</div><div class="line"></div><div class="line">CallFunction(const char* function_name UNUSED, linker_function_t function) &#123;</div><div class="line">    ...</div><div class="line">  TRACE(&quot;[ Calling %s @ %p for &apos;%s&apos; ]&quot;, function_name, function, name);</div><div class="line">  function();</div><div class="line">  TRACE(&quot;[ Done calling %s @ %p for &apos;%s&apos; ]&quot;, function_name, function, name);</div><div class="line"></div><div class="line">  set_soinfo_pool_protection(PROT_READ | PROT_WRITE);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>所以使用 adb pull /system/bin/linker 将linker 二进制文件dump 到本地 使用IDA打开搜索<br><strong>Calling %s @ %p for ‘%s’</strong><br>可以找到如下位置：<br><img src="/2017/11/21/legu/15112673692313/15112690479492.jpg" alt=""></p>
+<p>在offset=0x274c的地方就是执行init 函数的位置，记录下这个偏移。</p>
+<p>此时IDA 附加上app进程，在modules 窗口查看linker加载的基地址，算出BLX R4在内存中的实际位置，并打上断点，F9运行起来我们就可以看到加载so 完成后会在这个地方暂停。<br><img src="/2017/11/21/legu/15112673692313/15112693065173.jpg" alt=""></p>
+<p>当日志窗口显示load libshella.so的时候我们观察R4寄存器。它指向了init函数的位置。<br><img src="/2017/11/21/legu/15112673692313/15112693835951.jpg" alt=""></p>
+<p>F7 进入libshella.so<br><img src="/2017/11/21/legu/15112673692313/15112696904885.jpg" alt=""><br>发现来到了offset=0xCA4的位置。dump出这个时候的so，修复后查看0xCA4位置，发现有一些位操作，怀疑是在进行解密。<br><img src="/2017/11/21/legu/15112673692313/15112699542294.jpg" alt=""></p>
+<p>ctrl+s查看section 在解密操作之前之后对比可以发现多处了一个code section<br><img src="/2017/11/21/legu/15112673692313/15112701088331.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15112701433352.jpg" alt=""></p>
+<p>此时我们dump 解密后的so 修复后查看0xCA4会发现函数sub_36e8里面创建了一个线程.还发现有熟悉的JNI_OnLoad()<br><img src="/2017/11/21/legu/15112673692313/15112703050658.jpg" alt=""></p>
+<p>查看sub_335c()会发现在读取/proc/self/maps 等里面数据。这是反调试常用的方法。<br>发现如下字段，说明这个函数就是检测反调试的。<br><img src="/2017/11/21/legu/15112673692313/15112704331002.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15112704405486.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15112704534685.jpg" alt=""><br>总共存在3处，可以使用nop 掉函数的方法过掉反调试。本次采用nop很修改 cmp r2,r3 为cmp r2 r2的方法让kill raise方法不执行。</p>
+<p>回到sub_CA4的最后一个函数进去可以看到<br><img src="/2017/11/21/legu/15112673692313/15112706127253.jpg" alt=""><br>看到了熟悉的JNI_Onlad()函数。但是通过调试发现因为v1获取为0，所以并没有执行这个地方的jni_onload。<br>但是我们可以直接通过在libdvm.so 加载JNI_ONload函数的地方下断点。选择的地方是offset=0x0004FFB6。因为这个地方通过 <strong>dlsym(handle, “JNI_OnLoad”)</strong>返回了jni_onload的地址。<br><img src="/2017/11/21/legu/15112673692313/15112709707849.jpg" alt=""></p>
+<p>此时r0 寄存器指向了jni_onload().通过G建跳转来到了JNI_Onload函数。对照之前dump 的so中的jni_onload <img src="/2017/11/21/legu/15112673692313/15112711228517.jpg" alt=""></p>
+<p>可以看到 又通过dlopen 打开了一个内存，然后通过dlsym 找到新的JNI_OnLoad。然后在通过函数指针的方式<strong>v7(v5，v4)</strong>执行了 jni_onload。<br>查看sub_19c8() 看到了inflateInit2 、inflateEnd 、mmap、mprotect 关键字。可以认定是先解压了一段数据 然后通过mmap映射到内存中，使用mprotect 修改内存属性。所以我们直接断点在dlsym 地方拿到jni_onload的最终地址。<br>执行完sub_19c8（）后看到如下日志<br><img src="/2017/11/21/legu/15112673692313/15112721438791.jpg" alt=""></p>
+<p>当执行完dlsym(“JNI_OnLoad”)后发现返回的内存地址指向了一个新的区段<br><img src="/2017/11/21/legu/15112673692313/15112716147064.jpg" alt=""><br>这个debug101 就是之前内存映射产生的。我们保存一个内存的 idb文件。也通过G跳转到新的jni_onload地址。不过需要注意的是 地址为奇数为thumb模式，需要alt+g 设置T=0x1。<br>当来到最终jni_onload地方通过F5可以看到执行流程为<br><img src="/2017/11/21/legu/15112673692313/15112723312976.jpg" alt=""><br>最终执行的 unk_764f798c(v4)，进入此函数可以看到<br><img src="/2017/11/21/legu/15112673692313/15112724133503.jpg" alt=""></p>
+<p>有熟悉的registerNatices 关键字。还有类名。通过在执行动态注册的地方断点可以看到注册了5个函数。对应了com.tencent.StubShell.TxAppEntry中的  load，runCreate，changeEnv，reciver和txEntries我们需要重点关注load 函数。<br>因为 动态注册时 Method 是一个结构体类似于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">struct&#123;</div><div class="line">Method_name;</div><div class="line">Method_signature;</div><div class="line">Method_address;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>所以跳转到load注册函数的地址 0x764ff951<br><img src="/2017/11/21/legu/15112673692313/15112725392662.jpg" alt=""></p>
+<p><img src="/2017/11/21/legu/15112673692313/15112725282101.jpg" alt=""></p>
+<p>对照之前存贮ida文件可以得到如下结果<br><img src="/2017/11/21/legu/15112673692313/15112730037843.jpg" alt=""></p>
+<p><img src="/2017/11/21/legu/15112673692313/15112730457515.jpg" alt=""><br>这个地方会判断手机的版本，还有检测zjdroid 因为使用的sdk=19 所以就会进入 else分支。<br>进入后发现这个函数很长，但也存在一些关键字提示。比如 classes.dex orgDexOffset,mix.dex,loadDex,multidex start…</p>
+<p>调试可以发现<br><img src="/2017/11/21/legu/15112673692313/15112734604803.jpg" alt=""><br>找到了 内存中odex加载的地址，所以我们跟踪这个地址看他如何执行。<br><img src="/2017/11/21/legu/15112673692313/15112735044632.jpg" alt=""><br>首先就执行到了<img src="/2017/11/21/legu/15112673692313/15112736335070.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15112736545138.jpg" alt=""><br>实际上这个是通过 DexHeader-&gt;dataOff+DexHeader-&gt;dataSize 后+0x1000 进行内存对齐<br>所以结果 (0x60000+0xD8B0) 对齐后就是0x6e000<br><img src="/2017/11/21/legu/15112673692313/15112739116650.jpg" alt=""></p>
+<p>在0x764ff06a的地方会memset(r0,0,0xE0)<br><img src="/2017/11/21/legu/15112673692313/15112740861871.jpg" alt=""><br>可以看到orgDexOffset 为0x6e000<br>所以内存 base_odex +orgDexOffset+odexHeader[0x28]可以得到orgDex_addr =0x74fc2028<br><img src="/2017/11/21/legu/15112673692313/15112747987941.jpg" alt=""><br>但是这个不是dex magic，所以继续调试。<br>执行unk_7650a3a0前后对比发现拷贝了0xE0字节到之前memset的内存中<br><img src="/2017/11/21/legu/15112673692313/15112742791649.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15112743369794.jpg" alt=""></p>
+<p>执行unk-76501d30 后发现 之前拷贝的0xe0字节被解密了，而且出现了dex的Magic 保存这0xe0字节。</p>
+<p><img src="/2017/11/21/legu/15112673692313/15112744312791.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15112744558693.jpg" alt=""></p>
+<p>当我们在他利用multidex 加载完dex后 查看之前的orgDex地址<br><img src="/2017/11/21/legu/15112673692313/15112757574484.jpg" alt=""></p>
+<p>发现头部已经被还原回去了，dump出Dex，这个时候dex就能打开了。<br><img src="/2017/11/21/legu/15112673692313/15112750872380.jpg" alt=""></p>
+<p>但是当对apk进行修复重打包后运行会抛出GuidePagerActivtity也就是入口类找不到。<br><img src="/2017/11/21/legu/15112673692313/15113246941245.jpg" alt=""><br>重新分析Idb文件可以发现在第一次解密后面还存在如下的代码<br><img src="/2017/11/21/legu/15112673692313/15113248018949.jpg" alt=""><br><img src="/2017/11/21/legu/15112673692313/15113248193502.jpg" alt=""><br>可以看到的是有一个<strong>while(true)</strong>循环，解密数据到v20，看到v20传入了sub_761EB9FC。进入可以看到<br><img src="/2017/11/21/legu/15112673692313/15113249718002.jpg" alt=""><br>看到有parse dexFile 关键字,所以这个地方是在解析DexFile。<br>还在while的尾部看到控制循环相关的语句<img src="/2017/11/21/legu/15112673692313/15113251322342.jpg" alt=""></p>
+<p>如果继续执行while循环 v20就是原来的v20+orgOffset。通过上面分分析已经知道oegOffet就是获取dex 的data_size+data_off 然后内存对齐。所以这个while循环是在解密多dex的情况。通过动态调试可以得到如下结果。第一次调用<br><img src="/2017/11/21/legu/15112673692313/15113308680598.jpg" alt=""><br>可以看到头部被解密了，[64 65 78 0A 30 33 35]就是dex.035 这个地方dump出来的也是第一个dex<br>当运行到控制while循环的地方时可以看到r0 指向了刚解密出来的dex<br><img src="/2017/11/21/legu/15112673692313/15113316245497.jpg" alt=""><br>运行后可以看到内存对齐为0x83330 也是第一次解密出来dex 的data_size+data_off 进行内存对齐后的结果。<br><img src="/2017/11/21/legu/15112673692313/15113319147538.jpg" alt=""></p>
+<p>第二次来到解密函数的地方，可以看到r1指向的地址已经改变，执行前后可以看到 hex View 已经被改变，解密出新的dex header.<br><img src="/2017/11/21/legu/15112673692313/15113321276007.jpg" alt=""></p>
+<p><img src="/2017/11/21/legu/15112673692313/15113321910945.jpg" alt=""></p>
+<p>通过上面的调试可以发现腾讯的加固核心就是通过 内存中odex的基地址+[DexHeader-&gt;data_size+DexHeader-&gt;data_off(对齐)]+0x28找到隐藏在ShellDex中的orgDex位置，然后解密出开始的0xE0字节。如果是多dex的apk 则以上一次次解密的起始点加上解密出来header中的data_size和data_off找到下一处处加密的header。<br>所以我们可以根据这个原理做一个自动脱壳的工具。还可以逆向它加密算法，做到静态脱壳。<br><img src="/2017/11/21/legu/15112673692313/15113376140824.jpg" alt=""></p>
+<p>其中他的加密算法如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">private static void decryptDex(String path)</div><div class="line"> &#123;</div><div class="line">   try</div><div class="line">   &#123;</div><div class="line">     FileInputStream inputStream = new FileInputStream(path);</div><div class="line">     byte[] data = new byte[inputStream.available()];</div><div class="line">     inputStream.read(data);</div><div class="line">     inputStream.close();</div><div class="line">     DexHead head = new DexHead(data);</div><div class="line">     int off = head.data_off + head.data_size + 4096 &gt;&gt;&gt; 12 &lt;&lt; 12;</div><div class="line">     ByteBuffer buffer = ByteBuffer.wrap(data);</div><div class="line">     buffer.order(ByteOrder.LITTLE_ENDIAN);</div><div class="line">     for (int n = 0; off &lt; data.length; n++)</div><div class="line">     &#123;</div><div class="line">       int[] src = new int[56];</div><div class="line">       for (int i = 0; i &lt; src.length; i++) &#123;</div><div class="line">         src[i] = buffer.getInt(i * 4 + off);</div><div class="line">       &#125;</div><div class="line">       int v12 = -957401312;</div><div class="line">       int v14 = 0;</div><div class="line">       for (int i = 0; i &lt; src.length / 2; i++)</div><div class="line">       &#123;</div><div class="line">         int v7 = src[(i * 2 + 1)];</div><div class="line">         int v8 = src[(i * 2)];</div><div class="line">         src[(i * 2)] = v8;</div><div class="line">         int v9 = v7;</div><div class="line">         src[(i * 2 + 1)] = v9;</div><div class="line">         for (int j = v12; j != v14; j += 1640531527)</div><div class="line">         &#123;</div><div class="line">           v9 -= (j + v8 ^ 16 * v8 ^ v8 &gt;&gt;&gt; 5);</div><div class="line">           v8 -= (v9 + j ^ 16 * v9 ^ v9 &gt;&gt;&gt; 5);</div><div class="line">         &#125;</div><div class="line">         src[(i * 2)] = v8;</div><div class="line">         src[(i * 2 + 1)] = v9;</div><div class="line">       &#125;</div><div class="line">       for (int i = 0; i &lt; src.length; i++) &#123;</div><div class="line">         buffer.putInt(i * 4 + off, src[i]);</div><div class="line">       &#125;</div><div class="line">       byte[] tmp = new byte[src[8]];</div><div class="line">       System.arraycopy(buffer.array(), off, tmp, 0, tmp.length);</div><div class="line">       FileOutputStream outputStream = new FileOutputStream(path + n);</div><div class="line">       outputStream.write(tmp);</div><div class="line">       outputStream.flush();</div><div class="line">       outputStream.close();</div><div class="line">       System.out.println(&quot;out: -&gt;&quot; + path + n);</div><div class="line">       </div><div class="line">       head = new DexHead(tmp);</div><div class="line">       //获取下一处dex加密的地方</div><div class="line">       off += (head.data_off + head.data_size + 4096 &gt;&gt;&gt; 12 &lt;&lt; 12);</div><div class="line">     &#125;</div><div class="line">   &#125;</div><div class="line">   catch (Exception localException) &#123;&#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/03/Mac 链接iPhone/" rel="next" title="Mac链接iPhone">
+                <i class="fa fa-chevron-left"></i> Mac链接iPhone
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/blog_head.jpeg"
+               alt="Lucaks" />
+          <p class="site-author-name" itemprop="name">Lucaks</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#腾讯加固分析"><span class="nav-number">1.</span> <span class="nav-text">腾讯加固分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lucaks</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/11/21/legu/';
+          this.page.identifier = '2017/11/21/legu/';
+          this.page.title = '腾讯加固分析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
