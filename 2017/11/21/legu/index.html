@@ -93,12 +93,12 @@
 
 
 
-<meta name="description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0. 直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。 这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / in">
+<meta name="description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="腾讯加固分析">
 <meta property="og:url" content="http://yoursite.com/2017/11/21/legu/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0. 直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。 这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / in">
+<meta property="og:description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0.">
 <meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112676221944.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112682096872.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112681311553.jpg">
@@ -148,10 +148,10 @@
 <meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113321276007.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113321910945.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15113376140824.jpg">
-<meta property="og:updated_time" content="2018-07-09T08:44:55.000Z">
+<meta property="og:updated_time" content="2018-07-09T09:38:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="腾讯加固分析">
-<meta name="twitter:description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0. 直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。 这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / in">
+<meta name="twitter:description" content="腾讯加固分析 修复so文件  Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。使用readelf -S 查看so 的section 地址都被清0.">
 <meta name="twitter:image" content="http://yoursite.com/2017/11/21/legu/15112673692313/15112676221944.jpg">
 
 
@@ -426,7 +426,7 @@
         <h1 id="腾讯加固分析"><a href="#腾讯加固分析" class="headerlink" title="腾讯加固分析"></a>腾讯加固分析</h1><ul>
 <li>修复so文件</li>
 </ul>
-<p>Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。<img src="/2017/11/21/legu/15112673692313/15112676221944.jpg" alt=""><br>使用readelf -S 查看so 的section 地址都被清0.<br><img src="/2017/11/21/legu/15112673692313/15112682096872.jpg" alt=""></p>
+<p>Legu的核心代码在libshella-2.10.6.0.so中，使用IDA 直接打开发现看到的函数都是sub_* 没有实际价值。<img src="/2017/11/21/legu/15112673692313/15112676221944.jpg" alt=""><br>使用readelf -S 查看so 的section 地址都被清0.<br><a id="more"></a><br><img src="/2017/11/21/legu/15112673692313/15112682096872.jpg" alt=""></p>
 <p>直接使用TomasKing的So修复工具修复后我们反而基本的sub_*函数也是消失了。<br><img src="/2017/11/21/legu/15112673692313/15112681311553.jpg" alt=""></p>
 <p>这个时候我们就需要想到so的代码被加密了，在so 加载的时候执行init / init_array 执行解密。<br>所以使用debug 模式附加上app。</p>
 <p>查看linker 的源码可以发现如下代码：</p>
