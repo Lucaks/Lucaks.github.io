@@ -274,6 +274,146 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/vmp360/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lucaks">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/blog_head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/02/vmp360/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T18:33:19+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/02/vmp360/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/02/vmp360/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="某VMP加固onCreate方法分析"><a href="#某VMP加固onCreate方法分析" class="headerlink" title="某VMP加固onCreate方法分析"></a>某VMP加固onCreate方法分析</h1><p>一、 看到论坛上大家都在分析数字壳，并且又有新的版本，所以自己写了一个上传加固。<br><img src="/2018/01/02/vmp360/15148891990651/15148896456854.jpg" alt=""><br>对于加固前的dex文件,010editor中找到insns。翻译如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.method protected onCreate(Bundle)V</div><div class="line">          .registers 5</div><div class="line"> invoke-superAppCompatActivity-&gt;onCreate(Bundle)V, p0, p1 # 6F 20 47 2A 43 00</div><div class="line"> invoke-virtual      MainActivity-&gt;hello()I, p0 #6E 10 18 3E 03 00</div><div class="line"> move-result         v0 # 0A 00</div><div class="line"> const-string        v1, &quot;360&quot;  #1A 01 33 01</div><div class="line"> invoke-static       String-&gt;valueOf(I)String, v0    #71 10 D2 3E 00 00</div><div class="line"> move-result-object  v2 # 0C 02</div><div class="line"> invoke-static       Log-&gt;i(String, String)I, v1, v2 #71 20 DC 38 21 00</div><div class="line"> return-void #0E 00</div><div class="line">.end method</div></pre></td></tr></table></figure>
+<p>二、利用Xposed 和inlineHook快速的进入Oncreate方法中</p>
+<p>app 加载so通过2种方式 System.loadLibrary 和System.load。通过hook加载so的方法让其先加载hook.so,在hook.so中再加载libjiagu.so。<br><img src="/2018/01/02/vmp360/15148891990651/15148906891717.jpg" alt=""><br><img src="/2018/01/02/vmp360/15148891990651/15148907341940.jpg" alt=""><br><img src="/2018/01/02/vmp360/15148891990651/15148907666460.jpg" alt=""></p>
+<p>此时我们的app已经能正常的运行起来。又因为onCreate方法是动态注册的，所以hook 注册函数dvmUseJNIBridge 当注册的是OnCreate函数时sleep 9s。<br><img src="/2018/01/02/vmp360/15148891990651/15148913261001.jpg" alt=""><br>这样的好处是我们可以直接进入onCreate注册的函数中，不用在乎Jni_Onload中的反调试。<br>打开app就能发现会有一段时间白屏，查看日志 说明我们已经能在注册OnCreate的时候暂停。<br><img src="/2018/01/02/vmp360/15148891990651/15148916166045.jpg" alt=""></p>
+<p>三、 IDA 调试</p>
+<p>使用IDA 附加后在hook.so中搜索我们的dvmUseJNIBridge，并打上断点，如图：<br><img src="/2018/01/02/vmp360/15148891990651/15148922718148.jpg" alt=""><br>当执行到sleep的时候 说明这个时候是OnCreate函数，r6指向的就是注册地址。ps:对照输出的log发现的。<br>跳转到0x753A810B，切换arm和thumb模式。这个时候我们已经进入了OnCreate函数中，继续调试分析他是如何实现VMP的。<br><img src="/2018/01/02/vmp360/15148891990651/15148924249290.jpg" alt=""></p>
+<p>我的样本有一个Log 当我执行完某一函数后发现已经有log输出就说明该代码已经被解释执行，记录下该函数的offset。因为不用理会反调试，这个过程就很快。分析到debbug offest=0x3b534，这个地方就开始操作加密的insns。<br><img src="/2018/01/02/vmp360/15148891990651/15148928245942.jpg" alt=""></p>
+<p><img src="/2018/01/02/vmp360/15148891990651/15148929328573.jpg" alt=""><br>所以我们得到了被抽取加密的insns</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">07 12 75 18 71 32 F2 22 2B 0C 31 32  </div><div class="line">35 32 CC 33 01 33 93 22 E6 0C 32 32 </div><div class="line">BE 30 93 12 EE 0A 13 32 87 32</div></pre></td></tr></table></figure>
+<p>继续往下分析，如图：<br><img src="/2018/01/02/vmp360/15148891990651/15148936059709.jpg" alt=""></p>
+<p>首先会把取出来的加密指令xor 0x3232进行解密，然后&amp;0x00FF 取出opcode，实际上这个opcode+0x5C 代表在table中的位置。通过table[opcode+0x5C]取出要执行的分支存放到r5寄存器。此时利用xor 解密出 加密的insns，关系如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">length    opcode               （2个一组 xor 0x3232） </div><div class="line">  2       6F 20 47 2A 43 00  -&gt; 07 12 75 18 71 32   -&gt; 35 20 47 2A 43 00</div><div class="line">  2       6E 10 18 3E 03 00  -&gt; F2 22 2B 0C 31 32   -&gt; C0 10 19 3E 03 00</div><div class="line">  [18-&gt;19]不知道是为什么~~~</div><div class="line">  2       0A 00              -&gt; 35 32 </div><div class="line">  2       1A 01 33 01        -&gt; CC 33 01 33</div><div class="line">  2       71 10 D2 3E 00 00  -&gt; 93 22 E6 0C 32 32 </div><div class="line">  2       0C 02              -&gt; BE 30 </div><div class="line">  2       71 20 DC 38 21 00  -&gt; 93 12  EE 0A 13 32 </div><div class="line">  2       0E 00              -&gt; 87 32</div></pre></td></tr></table></figure>
+<p>这个时候我们已经有原opcode，解密的方法，映射的分支的table。我们只要对照原opcode，看他映射的分支。记录每个分支对应的opcode。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">0x1207 xor 0x3232 -&gt; 0x2035  -&gt; 0x35&amp;0xFF +0x5C =0x91 --&gt;table[0x91]-&gt;0x74  -&gt;invoke-super [分支0x74 对应invoke-super]</div><div class="line">0x22F2 xor 0x3232 -&gt; 0x10C0  -&gt;0xC0 &amp;0xFF +0x5C =0x11C--&gt;table[0x11C]-&gt;0xE9 -&gt;invoke-virtual</div></pre></td></tr></table></figure>
+<p>这个时候尽管每个app 的映射表不一致，但是同一个操作码对应分支没有变化。我们拿到xor的key，提取出table，解密出分支的标号。也就能逆推出原来的opcode。也就还原了OnCreate方法。</p>
+<p>总结：<br> 利用Xposed 和inlinehook 快速的进入onCreate分析，这个方法也可以直接进入JNI_onLoad，如百度加固。<br> 利用Log判断对应的指令是否解释执行，一层层的跟进so。<br> 找到每个分支对应的opcode，不管table怎么变化都能还原。</p>
+<p> 参考文章：<br> 360加固之onCreate函数还原并重打包：<a href="https://bbs.pediy.com/thread-223223.htm" target="_blank" rel="external">https://bbs.pediy.com/thread-223223.htm</a><br> 某数字公司VMP脱壳简记：<a href="https://bbs.pediy.com/thread-223528.htm" target="_blank" rel="external">https://bbs.pediy.com/thread-223528.htm</a><br> so劫持思路：<a href="http://www.cnblogs.com/2014asm/p/6718821.html" target="_blank" rel="external">http://www.cnblogs.com/2014asm/p/6718821.html</a><br> 百度加固逆向分析:<a href="https://bbs.pediy.com/thread-216701.htm" target="_blank" rel="external">https://bbs.pediy.com/thread-216701.htm</a><br> InlineHook:<a href="https://github.com/ele7enxxh/Android-Inline-Hook" target="_blank" rel="external">https://github.com/ele7enxxh/Android-Inline-Hook</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/21/legu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1372,7 +1512,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
