@@ -374,7 +374,7 @@
 
       
         
-          <p>#记去除BCF ollvm混淆<br>OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。<a href="https://github.com/obfuscator-llvm/obfuscator/wiki/Bogus-Control-Flow" target="_blank" rel="external">Bogus-Control-Flow</a>其中这个表达式为(y &lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。</p>
+          <h1 id="记去除BCF-ollvm混淆"><a href="#记去除BCF-ollvm混淆" class="headerlink" title="记去除BCF ollvm混淆"></a>记去除BCF ollvm混淆</h1><p>OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。<a href="https://github.com/obfuscator-llvm/obfuscator/wiki/Bogus-Control-Flow" target="_blank" rel="external">Bogus-Control-Flow</a>其中这个表达式为(y &lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。</p>
 <p>其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个奇数，所以表达式永远为假Flase，所以不可能满足条件执行False的基本块。<br></p>
           <!--noindex-->
           <div class="post-button text-center">

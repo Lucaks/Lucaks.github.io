@@ -93,21 +93,21 @@
 
 
 
-<meta name="description" content="#记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个">
+<meta name="description" content="记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个奇">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记去除BCF ollvm混淆">
 <meta property="og:url" content="http://yoursite.com/2018/07/10/bcf_ollvm/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="#记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个">
+<meta property="og:description" content="记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个奇">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_16-41-56.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_16-47-21.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-6-23.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-34-50.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-32-48.png">
-<meta property="og:updated_time" content="2018-07-10T02:25:04.000Z">
+<meta property="og:updated_time" content="2018-07-10T02:33:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记去除BCF ollvm混淆">
-<meta name="twitter:description" content="#记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个">
+<meta name="twitter:description" content="记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个奇">
 <meta name="twitter:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_16-41-56.png">
 
 
@@ -379,7 +379,7 @@
       
 
       
-        <p>#记去除BCF ollvm混淆<br>OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。<a href="https://github.com/obfuscator-llvm/obfuscator/wiki/Bogus-Control-Flow" target="_blank" rel="external">Bogus-Control-Flow</a>其中这个表达式为(y &lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。</p>
+        <h1 id="记去除BCF-ollvm混淆"><a href="#记去除BCF-ollvm混淆" class="headerlink" title="记去除BCF ollvm混淆"></a>记去除BCF ollvm混淆</h1><p>OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。<a href="https://github.com/obfuscator-llvm/obfuscator/wiki/Bogus-Control-Flow" target="_blank" rel="external">Bogus-Control-Flow</a>其中这个表达式为(y &lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。</p>
 <p>其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个奇数，所以表达式永远为假Flase，所以不可能满足条件执行False的基本块。<br><a id="more"></a></p>
 <p>  理论上我们通过上述表达式执行为True的基本块，可以重建执行流程。但是有些垃圾块又会返回给他的父项。所以如果我们在符号执行过程中遵循这个路径，我们将陷入一个无限循环。所以，我们需要解决不明确的路径，直接找到正确的路径，避免无用的区块。</p>
 <p>由于存在2个全局变量 x,y 我们就可以很容易的利用IDApython找到含有表达式的BCF块的位置。我们找到BCF区块后不能直接把这个块删除，因为他可能和我们真实的指令混杂在一起。</p>
@@ -496,8 +496,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/blog_head.jpeg"
@@ -550,6 +559,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#记去除BCF-ollvm混淆"><span class="nav-number">1.</span> <span class="nav-text">记去除BCF ollvm混淆</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
