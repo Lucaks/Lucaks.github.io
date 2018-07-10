@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-6-23.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-34-50.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-32-48.png">
-<meta property="og:updated_time" content="2018-07-10T02:33:46.000Z">
+<meta property="og:updated_time" content="2018-07-10T02:36:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记去除BCF ollvm混淆">
 <meta name="twitter:description" content="记去除BCF ollvm混淆OLLVM中介绍到BCF原理，在正确的基本块前面插入一个新的基本块。新的基本块包含了一个表达式，它控制基本块的跳转。Bogus-Control-Flow其中这个表达式为(y &amp;lt; 10 || x * (x - 1) % 2 == 0)  当这个表达式为真[True]的时候就执行真实的基本块。 其中 x ,y  是一个固定的全局变量使得 x*(x-1)  永远是一个奇">
@@ -397,7 +397,7 @@
 <p>所以只有当到达一个不动点时，才结束运行。</p>
 <p>IDA并不保证对所有的x和y都能生成xref，解决办法是将数据写回文件，并用IDA重新打开被修改后的文件。去除前后后效果如下图所示：<br><img src="/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-34-50.png" alt=""><br><strong>去除后：</strong></p>
 <p><img src="/2018/07/10/bcf_ollvm/15311869622098/image2018-1-17_17-32-48.png" alt=""></p>
-<p>样本：<a href="media/15311869622098/libbaiduprotect.so">libbaiduprotect.so</a><br>代码：<a href="media/15311869622098/newbcf.py">newbcf.py</a><br>Email：fenghuanglucaks@gmail.com</p>
+<p>样本：<a href="bcf_ollvm/15311869622098/libbaiduprotect.so">libbaiduprotect.so</a><br>代码：<a href="bcf_ollvm/15311869622098/newbcf.py">newbcf.py</a><br>Email：fenghuanglucaks@gmail.com</p>
 
       
     </div>
