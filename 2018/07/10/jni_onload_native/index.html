@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/10/jni_onload_native/15311908429887/8.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/jni_onload_native/15311908429887/6.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/07/10/jni_onload_native/15311908429887/7.jpg">
-<meta property="og:updated_time" content="2018-07-10T03:06:06.000Z">
+<meta property="og:updated_time" content="2018-07-10T03:10:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="直接进入jni-onload 和native方法的实现">
 <meta name="twitter:description" content="记一种直接进入jni-onload 和native方法的实现巧入jni_onload通常我们在调试Android的so的时候为了能进入jni_onload 需要am start 启动app，然后使用ida附加，在jdb附加。整个过程显得非常的麻烦。有些加固so 在init_array中设置了反调试，这个过程就变得更加的艰难。这个时候就可以利用自己写个 loader的办法加载这个so，直接加载jni">
@@ -383,8 +383,7 @@
       
 
       
-        <h3 id="记一种直接进入jni-onload-和native方法的实现"><a href="#记一种直接进入jni-onload-和native方法的实现" class="headerlink" title="记一种直接进入jni-onload 和native方法的实现"></a>记一种直接进入jni-onload 和native方法的实现</h3><h4 id="巧入jni-onload"><a href="#巧入jni-onload" class="headerlink" title="巧入jni_onload"></a>巧入jni_onload</h4><p>通常我们在调试Android的so的时候为了能进入jni_onload 需要am start 启动app，然后使用ida附加，在jdb附加。整个过程显得非常的麻烦。有些加固so 在init_array中设置了反调试，这个过程就变得更加的艰难。这个时候就可以利用自己写个 loader的办法加载这个so，直接加载jni_onload。在Android上，利用xposed 就可以实现就可以实现这个功能。</p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/1.jpg" alt="1"></p>
+        <h3 id="记一种直接进入jni-onload-和native方法的实现"><a href="#记一种直接进入jni-onload-和native方法的实现" class="headerlink" title="记一种直接进入jni-onload 和native方法的实现"></a>记一种直接进入jni-onload 和native方法的实现</h3><h4 id="巧入jni-onload"><a href="#巧入jni-onload" class="headerlink" title="巧入jni_onload"></a>巧入jni_onload</h4><p>通常我们在调试Android的so的时候为了能进入jni_onload 需要am start 启动app，然后使用ida附加，在jdb附加。整个过程显得非常的麻烦。有些加固so 在init_array中设置了反调试，这个过程就变得更加的艰难。这个时候就可以利用自己写个 loader的办法加载这个so，直接加载jni_onload。在Android上，利用xposed 就可以实现就可以实现这个功能。<br><a id="more"></a><br><img src="/2018/07/10/jni_onload_native/15311908429887/1.jpg" alt="1"></p>
 <p>分析Android加载so的方法，看到就只有2种方式：System.loader 和 System.loadLibrary,我们hook他，让他先加载我们的so_loader。<br><strong>注意:</strong>不能直接hook System.class中的load 和loadLibaray，看xposed作者说的使用Runtime.class。</p>
 <p>可以看到 我们让目标so加载我们自己的hook.so,做到李代桃僵,让app人为自己加载的就是原始的so。接下来我们看看hook.so的实现：</p>
 <p><img src="/2018/07/10/jni_onload_native/15311908429887/3.jpg" alt="3"><br>   <img src="/2018/07/10/jni_onload_native/15311908429887/2.jpg" alt="2"></p>

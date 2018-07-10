@@ -374,30 +374,14 @@
 
       
         
-          
-            <h3 id="记一种直接进入jni-onload-和native方法的实现"><a href="#记一种直接进入jni-onload-和native方法的实现" class="headerlink" title="记一种直接进入jni-onload 和native方法的实现"></a>记一种直接进入jni-onload 和native方法的实现</h3><h4 id="巧入jni-onload"><a href="#巧入jni-onload" class="headerlink" title="巧入jni_onload"></a>巧入jni_onload</h4><p>通常我们在调试Android的so的时候为了能进入jni_onload 需要am start 启动app，然后使用ida附加，在jdb附加。整个过程显得非常的麻烦。有些加固so 在init_array中设置了反调试，这个过程就变得更加的艰难。这个时候就可以利用自己写个 loader的办法加载这个so，直接加载jni_onload。在Android上，利用xposed 就可以实现就可以实现这个功能。</p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/1.jpg" alt="1"></p>
-<p>分析Android加载so的方法，看到就只有2种方式：System.loader 和 System.loadLibrary,我们hook他，让他先加载我们的so_loader。<br><strong>注意:</strong>不能直接hook System.class中的load 和loadLibaray，看xposed作者说的使用Runtime.class。</p>
-<p>可以看到 我们让目标so加载我们自己的hook.so,做到李代桃僵,让app人为自己加载的就是原始的so。接下来我们看看hook.so的实现：</p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/3.jpg" alt="3"><br>   <img src="/2018/07/10/jni_onload_native/15311908429887/2.jpg" alt="2"></p>
-<p>被hook的app进程会先加载我们的hook.so,执行jni_onload方法。在jni_onload中我们利用dlopen 打开了原始的so。利用dlsym找到原始so的jni_onload。编译运行测试，我么可以发现app已经能正常运行，测试成功。有了这样的工具，我们可以跨过init_array中的反调试，避免每次am start 、jdb 转发的麻烦过程。快速的进去调试so的jni_onload。</p>
-<h4 id="快速进入native方法。"><a href="#快速进入native方法。" class="headerlink" title="快速进入native方法。"></a>快速进入native方法。</h4><p>现在是个app都会利用RegisterNatives动态注册一大堆函数。之前可以通过替换env结构体中的RegisterNative 函数，具体参考TomaksKing的文章。但是发现registernatives 最后调用的还是dvmUseJniBridge。</p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/20130516013514637.jpg" alt="20130516013514637"></p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/5.png" alt="5"></p>
-<p>我们hook这个地方就能拿到一个method结构体，和一个动态注册函数的地址。我们拿到method结构体就能得到方法的name。Method结构如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">struct Method &#123;</div><div class="line">        ClassObject* clazz;</div><div class="line">        u4 accessFlags;</div><div class="line">        u2 methodIndex;</div><div class="line">        u2 registersSize;</div><div class="line">        u2 outsSize;</div><div class="line">        u2 insSize;</div><div class="line">        const char* name;</div><div class="line">        DexProto prototype;</div><div class="line">        const char* shorty;</div><div class="line">        const u2* insns;</div><div class="line">        int jniArgInfo;</div><div class="line">        DalvikBridgeFunc nativeFunc;</div><div class="line">        bool fastJni;</div><div class="line">        bool noRef;</div><div class="line">        bool shouldTrace;</div><div class="line">        const RegisterMap* registerMap;</div><div class="line">        bool inProfile;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>hook 代码如下图所示：</p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/4.jpg" alt="4"></p>
-<p>hook的结果如图，可以看到注册的方法和对应的地址等信息:<br><img src="/2018/07/10/jni_onload_native/15311908429887/8.jpg" alt="8"></p>
-<p>这个时候如果我们过滤出想要调试的native方法只需要在注册的时候 休眠几秒。我们趁机附加调试并且在真实的Oncreate地方断点，这样继续执行后就会在断点地方断下来了。</p>
-<p>如图所示：<br>先在sleep 结束地方断点，保证注册的是我们需要调试的函数。这个时候r6寄存器就是注册的函数地址。我们跳转过去断点，执行后就成功到达断点位置。</p>
-<p><img src="/2018/07/10/jni_onload_native/15311908429887/6.jpg" alt="6"></p>
-<p>进入断点位置后：<br><img src="/2018/07/10/jni_onload_native/15311908429887/7.jpg" alt="7"></p>
-<p>####总结</p>
-<p>结合xposed 和inlinehook 可以简化我们调试过程，过掉一些初级的反调试。</p>
-<p>利用动态注册的特性可以hook到注册函数，得到注册地址。</p>
-
-          
+          <h3 id="记一种直接进入jni-onload-和native方法的实现"><a href="#记一种直接进入jni-onload-和native方法的实现" class="headerlink" title="记一种直接进入jni-onload 和native方法的实现"></a>记一种直接进入jni-onload 和native方法的实现</h3><h4 id="巧入jni-onload"><a href="#巧入jni-onload" class="headerlink" title="巧入jni_onload"></a>巧入jni_onload</h4><p>通常我们在调试Android的so的时候为了能进入jni_onload 需要am start 启动app，然后使用ida附加，在jdb附加。整个过程显得非常的麻烦。有些加固so 在init_array中设置了反调试，这个过程就变得更加的艰难。这个时候就可以利用自己写个 loader的办法加载这个so，直接加载jni_onload。在Android上，利用xposed 就可以实现就可以实现这个功能。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/10/jni_onload_native/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
